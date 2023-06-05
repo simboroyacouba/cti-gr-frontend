@@ -1,4 +1,4 @@
-﻿<h1>Articles</h1>
+﻿<h1>Points de vente</h1>
 <a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un article</a>
 
 <div>
@@ -7,23 +7,18 @@
         <tr>
             <th style="width: 15%">Code</th>
             <th style="width: 15%">Nom</th>
-            <th style="width: 15%">Prix d'achat</th>
-            <th style="width: 15%">Prix de vente</th>
-            <th style="width: 15%">quantité en stock</th>
-            <th style="width: 15%">Email</th>
+            <th style="width: 15%">actif</th>
             <th style="width: 10%"></th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let article of articles">
-            <td style="width: 15%">{{article.code}}</td>
-            <td style="width: 15%">{{article.nom}}</td>
-            <td style="width: 15%">{{article.description}}</td>
-            <td style="width: 15%">{{article.stock}}</td>
+        <tr *ngFor="let po of pos">
+            <td style="width: 15%">{{po.code}}</td>
+            <td style="width: 15%">{{po.nom}}</td>
+            <td style="width: 15%">{{po.actif}}</td>
             
-            <td style="width: 15%">{{article.stockMin}}</td>
             <td style="white-space: nowrap">
-                <a routerLink="edit/{{article.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                <a routerLink="edit/{{po.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
                 <!--<button *ngIf="article.actif == false" style="background-color: darkgreen;"  class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
                     <span *ngIf="article.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!article.isDeleting">
@@ -45,7 +40,7 @@
                 </button>-->
             </td>
         </tr>
-        <tr *ngIf="!articles">
+        <tr *ngIf="!pos">
             <td colspan="4" class="text-center">
                 <span class="spinner-border spinner-border-lg align-center"></span>
             </td>

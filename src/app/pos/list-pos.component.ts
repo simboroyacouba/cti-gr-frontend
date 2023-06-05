@@ -2,6 +2,8 @@
 import { ArticleService } from '@app/_services/article.service';
 import { Article } from '@app/_models/Article';
 import { Entreprise } from '@app/_models/Entreprise';
+import { Pos } from '@app/_models/pos';
+import { PosService } from '@app/_services/pos.service';
 
 @Component({ 
     templateUrl: 'list-pos.component.html',
@@ -9,21 +11,21 @@ import { Entreprise } from '@app/_models/Entreprise';
 })
 
 export class ListPosComponent implements OnInit {
-    articles!: Article[];
+    pos!: Pos[];
     entreprise!:Entreprise;
     constructor(
-        private  articleService:  ArticleService
+        private  posService: PosService
     ) {}
 
     ngOnInit() {
       this.entreprise = JSON.stringify(localStorage.getItem('entreprise')) as unknown as Entreprise;
-      this.articleService.getAll().subscribe({
-        next: (value: Article[]) => this.articles = value,
+      this.posService.getAll().subscribe({
+        next: (value: Article[]) => this.pos = value,
         error: (error: any) => { }
       });
       
        
-      console.log("*****************"+this.articles);
+      console.log("*****************"+this.pos);
       console.log("*****************"+this.entreprise);
     }
 

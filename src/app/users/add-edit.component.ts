@@ -91,6 +91,7 @@ export class AddEditComponent implements OnInit {
                 .subscribe((x) => {
                     this.form.patchValue(x);
                     this.form.controls['password'].setValue("");
+                    this.form.controls['rolesSelectedOnForm'].setValue(x.roles);
                     this.photo = `${environment.apiUrl}/api/auth/download?chemin=`+x.profilePhoto?.replace(/\\/g, '/');
                     this.loading = false;
                 });

@@ -18,13 +18,10 @@
               <h3 class="card-title"><b>Détails de l'article</b></h3>
                 
                 <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
-                    <div >
-                        <img  width="200" height="200" class="rounded-circle" [src]="functionPhoto()" style=" float: left;">
-                    </div>
-                    <div class="row" >
+                   <div class="row" >
                         <div class="mb-3 col">
                             <label class="form-label">Code</label>
-                            <input  type="text"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" [disabled]="!!id">
+                            <input  type="text" [value]="posAddOrEdit.code" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" [disabled]="!!id">
                          </div>
                         
                         <div class="mb-3 col">
@@ -35,122 +32,17 @@
                             </div>
                         </div>
                         
-                    
-                        <div class="mb-3 col">
-                            <label class="form-label">Code bar</label>
-                            <input type="text" formControlName="codeBar" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.codeBar.errors }" />
-                        </div>
-                    
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col">
-                            <label class="form-label">Type d'article</label>
-                            <div class="col-sm-10">
-                                <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idTypeArticle" 
-                                    [ngClass]="{ 'is-invalid': submitted && f.idTypeArticle.errors }">
-                                    <option *ngFor="let articleType of articleTypes" [value]="articleType.id">{{articleType.nom }}</option>
-                                </select>
-                                <div *ngIf="submitted && f.idTypeArticle.errors" class="invalid-feedback">
-                                    <div *ngIf="f.idTypeArticle.errors.required">Le prix de vente est obligatoire</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col">
-                            <label class="form-label">Prix de vente</label>
-                            <input type="number" formControlName="prixVente" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixVente.errors }" />
-                            <div *ngIf="submitted && f.prixVente.errors" class="invalid-feedback">
-                                <div *ngIf="f.prixVente.errors.required">Le prix de vente est obligatoire</div>
-                            </div>
-                        </div>
-
-                       
-                    
                     </div>
 
-                   
-
+                  
+                  
                     <div class="row">
-                        <div class="mb-3 col">
-                            <label class="form-label">Quantité en stock</label>
-                            <input type="number" formControlName="stock" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.stock.errors }" />
-                            <div *ngIf="submitted && f.stock.errors" class="invalid-feedback">
-                                <div *ngIf="f.stock.errors.required">Le nom d'utilisateur est obligatoire</div>
-                            </div>
-                        </div>
-                        <div class="mb-3 col">
-                            <label class="form-label">Quantité de stock minimale avant alerte</label>
-                            <input type="number" formControlName="stockMin" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.stockMin.errors }" />
-                            <div *ngIf="submitted && f.stockMin.errors" class="invalid-feedback">
-                                <div *ngIf="f.stockMin.errors.required">Le nom d'utilisateur est obligatoire</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="mb-3 col">
-                            <label class="form-label"> Achat</label>
-                            <mat-slide-toggle formControlName="achat"></mat-slide-toggle>
-                        </div>
-                    
-
                         <div class="mb-3 col">
                             <label class="form-label"> actif</label>
                             <mat-slide-toggle formControlName="actif"></mat-slide-toggle>
                         </div>
                     </div>
-                    <div *ngIf="articleAddOrEdit.achat" class="row">
-                        <div class="mb-3 col">
-                            <label class="form-label">Prix de revient</label>
-                            <input type="number" formControlName="prixAchat" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixAchat.errors }" />
-                        </div>
-                    </div>
-                    <div class="row"> <div class="mb-3 col">
-                        <label class="form-label">description</label>
-                        <textarea rows="4"   formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" ></textarea>
-                        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                            <!--<div *ngIf="f.description.errors.required">Email is required</div>-->
-                        </div>
-                    </div>
-                        <label class="form-label">
-                            <div *ngIf="id"> Changer de photo</div>
-                            <div *ngIf="!id"> Charger une photo photo</div>
-                        </label>
-                        <div class="row">
-                            <div class="col-8">
-                            <label class="btn btn-default p-0">
-                                <input class="form-control" type="file" accept="image/*" (change)="selectFile($event)" />
-                            </label>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                        <div *ngIf="currentFile && progress" class="progress my-3">
-                            <div
-                            class="progress-bar progress-bar-info"
-                            role="progressbar"
-                            attr.aria-valuenow="{{ progress }}"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            [ngStyle]="{ width: progress + '%' }"
-                            >
-                            {{ progress }}%
-                            </div>
-                        </div>
-                        
-                        <div *ngIf="message" class="alert alert-secondary" role="alert">
-                            {{ message }}
-                        </div>
-                        
-                        
-                        <button (click)="test()">
-                            test
-                        </button> 
-                    </div>
+                    
                     <br>
                     <div class="mb-3">
                         <button [disabled]="submitting" class="btn btn-primary">
@@ -166,6 +58,78 @@
             </div>
         </div>
     </div>
+</section>
+<br>
+<section *ngIf="id"  class="section">
+    <div style="width: auto;">
+
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"><b>Liste des caisiers</b></h3>
+            
+          <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Code</th>
+                    <th style="width: 20%">Nom</th>
+                    <th style="width: 20%">actif</th>
+                    <th style="width: 10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let caissierOnPos of caissiersOnPos">
+                    <td style="width: 20%">{{caissierOnPos.code}}</td>
+                    <td style="width: 20%">{{caissierOnPos.firstName}}</td>
+                    <td style="width: 20%">{{caissierOnPos.lastName}}</td>
+                    
+                    <td style="white-space: nowrap">
+                       
+                        <button class="btn btn-sm btn-danger btn-delete-user" (click)="removeUserOnBox(caissierOnPos.id!)">
+                            Retirer
+                            <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!caissiersOnPos">
+                    <td colspan="4" class="text-center">
+                        <span class="spinner-border spinner-border-lg align-center"></span>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        <br><br>
+            <form *ngIf="!loadingForm2" [formGroup]="form2" (ngSubmit)="onSubmitAddUserToBox()">
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label">Ajouter un caissier</label>
+                        <div class="col-sm-10">
+                            <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idUser" 
+                                [ngClass]="{ 'is-invalid': submitted && f2.idUser.errors }">
+                                <option *ngFor="let caissier of caissiers" [value]="caissier.id">{{caissier.firstName }} {{caissier.lastName }}</option>
+                            </select>
+                            <div *ngIf="submitted && f2.idUser.errors" class="invalid-feedback">
+                                <div *ngIf="f2.idUser.errors.required">Veuiller sellectionner un caissier</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+        
+                
+                <br>
+                <div class="mb-3">
+                    <button [disabled]="submitting" class="btn btn-primary">
+                        <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+                        Ajouter
+                    </button>
+                </div>
+            </form>
+            <div *ngIf="loading" class="text-center m-5">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
 
     </div><!-- End Page Title -->
