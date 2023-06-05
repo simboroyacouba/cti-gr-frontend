@@ -1,0 +1,87 @@
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>{{title}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Homezftrhesdvqe</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Elements</li>
+        </ol>
+      </nav>
+
+      <section class="section">
+        <div style="width: auto;">
+
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title"><b>Détails du type d'article</b></h3>
+                
+                <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
+                   
+                    <div class="row" >
+                        <div class="mb-3 col">
+                            <label class="form-label">Code</label>
+                            <input  type="text"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" [disabled]="!!id">
+                         </div>
+                        
+                        <div class="mb-3 col">
+                            <label class="form-label">Nom</label>
+                            <input type="text" formControlName="nom" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }" />
+                            <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
+                                <div *ngIf="f.nom.errors.required">Le nom est obligatoire</div>
+                            </div>
+                        </div>
+
+                    </div>
+                  
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label"> actif</label>
+                            <mat-slide-toggle formControlName="actif"></mat-slide-toggle>
+                        </div>
+                    </div>
+                   
+                    <div class="row"> <div class="mb-3 col">
+                        <label class="form-label">description</label>
+                        <textarea rows="4"   formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" ></textarea>
+                        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                            <!--<div *ngIf="f.description.errors.required">Email is required</div>-->
+                        </div>
+                    </div>
+                        <label class="form-label">
+                            <div *ngIf="id"> Changer de photo</div>
+                            <div *ngIf="!id"> Charger une photo photo</div>
+                        </label>
+                     
+                        
+                        
+                      
+                        
+                        
+                        
+                        
+                        <button (click)="test()">
+                            test
+                        </button> 
+                    </div>
+                    <br>
+                    <div class="mb-3">
+                        <button [disabled]="submitting" class="btn btn-primary">
+                            <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+                            Enregistrer
+                        </button>
+                        <a routerLink="/users" class="btn btn-link">Annuler</a>
+                    </div>
+                </form>
+                <div *ngIf="loading" class="text-center m-5">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </div><!-- End Page Title -->
+
+    

@@ -1,0 +1,74 @@
+﻿<h1>Users</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Add User</a>
+
+
+<div>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Prenom</th>
+            <th style="width: 15%">Nom</th>
+            <th style="width: 15%">Nom d'utilisateur</th>
+            <th style="width: 15%">Role</th>
+            <th style="width: 15%">Email</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td style="width: 15%">{{user.code}}</td>
+            <td style="width: 15%">{{user.firstName}}</td>
+            <td style="width: 15%">{{user.lastName}}</td>
+            <td style="width: 15%">{{user.username}}</td>
+            <td  *ngFor="let role of user.roles" style="width: 15%">
+                <span *ngIf=" role.name =='ROLE_USER'">employe </span> 
+                <span *ngIf=" role.name =='ROLE_ADMIN'">Administrateur </span>
+                <span *ngIf=" role.name =='ROLE_MODERATOR'">Manager </span> 
+            </td>
+            <td style="width: 15%">{{user.email}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                <button *ngIf="user.actif == false" style="background-color: darkgreen;" (click)="activateDesactivateUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
+                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!user.isDeleting">
+                
+                        <span >
+                            Activer
+                        </span>
+                    </span>
+                </button>
+
+                <button *ngIf="user.actif == true"  (click)="activateDesactivateUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
+                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!user.isDeleting">
+                        <span  >
+                            Désactiver
+                        </span> 
+                       
+                    </span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!users">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <mat-paginator 
+                [length]="length"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                [pageIndex]="pgIndex">
+                (page)="pageChange($event)"
+                >
+ </mat-paginator>
+ 
+ <button (click)="pageChange()" class="btn btn-sm btn-danger btn-delete-user">
+ act
+</button>
+ 
+</div>

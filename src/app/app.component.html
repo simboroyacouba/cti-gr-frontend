@@ -1,0 +1,132 @@
+﻿<!--debut si l'utilisateur n'est pas connecte un affiche la page de connexion sans menu-->
+<div *ngIf="userConnected == false">
+  <router-outlet></router-outlet>
+</div>
+<!--fin si l'utilisateur n'est pas connecte un affiche la page de connexion sans menu-->
+
+<!-- debut si l'utilisateur est connecte un affiche la page avec menu-->
+ <div *ngIf="userConnected == true"style="height: 100%; width: 100%;">
+  <div  *ngIf="licenceDeSession.licenceActive == true">
+    <div class="sidebar" [class.sidebar-close]="!openSidebar">
+      <div class="logo-details">
+        <div class="logo"></div>
+      </div>
+       <div></div>
+      <!-- debut menu-->
+      <!--<ul class="nav-links" id="nav-links">
+        <li *ngFor="let item of menuSidebar" #itemEl routerLinkActive="active">
+          <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
+            <a [routerLink]="[item.link]">
+              <i [class]="item.icon"></i>
+              <span class="link_name">{{item.link_name}}</span>
+            </a>
+          </div>
+          <div *ngIf="item.sub_menu.length > 0" class="dropdown-title" (click)="showSubmenu(itemEl)">
+            <a>
+              <i [class]="item.icon"></i>
+              <span class="link_name">{{item.link_name}}</span>
+            </a>
+            <i class='bx bxs-chevron-down arrow'></i>
+          </div>
+          <ul class="sub-menu" [class.blank]="item.sub_menu.length == 0">
+            <li><a class="link_name">{{item.link_name}}</a></li>
+            <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+              <a [routerLink]="[item_sub.link]">{{item_sub.link_name}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>-->
+       <!-- fin menu-->
+      
+    </div>
+   
+    <section class="home-section">
+      <div class="home-header">
+       
+        <!-- debut button open/close menu-->
+        <div class="hamburger-menu">
+          <input type="checkbox" id="checkbox-hamburger-menu" [(ngModel)]="openSidebar"/>
+          <label class="label-hamburger-menu" for="checkbox-hamburger-menu">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </label>
+        </div>
+        <!-- fin button open/close menu-->
+        <!-- debut menu haut-->
+          <nav class=" navbar-expand-md navbar-dark bg-dark" style="width: 100%; height: 60px; margin-bottom: 30px;">
+            <div class="dropdown" style=" margin-top: 15px; float: right; color: rgb(3, 3, 3);">
+              <div style="margin-right: 20px;">
+                
+               <button mat-raised-button style="background-color: rgba(3, 3, 3, 0);" ><img [src]='photo' width="40" height="40" class="rounded-circle"></button>
+              </div>  
+              
+                <i class="fa fa-caret-down"></i>
+                <div class="dropdown-content" style="margin-top: 0px;">
+                  <a href="users/me">Profil</a>
+                  <a (click)="logout()">Déconnection</a>
+                </div>
+              </div>
+          </nav> 
+          <!-- fin menu haut-->
+      </div>
+      <!--debut main-->
+      <div class="home-view"  >
+        <router-outlet></router-outlet>
+
+      <div style="background-color: crimson;">
+        
+      </div>
+      </div>
+      <!--fin main-->
+    </section>
+ 
+    
+  </div>
+
+  <div *ngIf="licenceDeSession.licenceActive == false" style="height: 100%; width: 100%; background: #21a8d1">
+    
+    <div style=" height: 90px;"></div>
+
+    <div class="container mt-5" >
+      <div class="row d-flex justify-content-center">
+              <div class="card px-5 py-5" id="form1">
+                
+                  <h1>Votre licence a expiré </h1>
+                  <h2>Veuillez contacter votre administrateur systeme au (+226 66385168 / 01009000)</h2>
+                  <div  class=>
+                      <form [formGroup]="formLicence" (ngSubmit)="activateLicence()">
+                        
+                              <label class="form-label">Code de licence</label>
+                              <input type="text" minlength="29" maxlength="29"  formControlName="codeLicence" class="form-control" [ngClass]="{ 'is-invalid': submitted && fLicence.codeLicence.errors}" />
+                              <div *ngIf="submitted && fLicence.codeLicence.errors" class="invalid-feedback">
+                                <div *ngIf="fLicence.codeLicence.errors.required">Code de licence obligatoire</div>
+                              </div>
+                        
+                          <div style="margin-top: 10px">
+                              <button [disabled]="loading || fLicence.codeLicence.errors" class="btn btn-primary">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                                  Enregistrer
+                              </button>
+                          </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+  
+<footer style="position: fixed;
+                bottom: 0;
+                width: 100%;
+                height: 60px;   /* Height of the footer */
+                background: #6cf;">
+    <!-- Copyright -->
+    <div class="text-center p-3">
+      © 2020 Copyright:
+      <a class="text-dark" href="https://mdbootstrap.com/">core tech Innovation</a>
+      
+    </div>
+    <!-- Copyright -->
+  </footer>
