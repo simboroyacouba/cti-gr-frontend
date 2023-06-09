@@ -44,7 +44,11 @@ export class AddEditArticleTypeComponent implements OnInit {
    
        
         this.userConnected = this.accountService.userValue;
-       
+        this.accountService.getById(this.userConnected!.id!)
+        .subscribe((x) => {
+            this.userConnected = x;
+        });
+        
           //dans le cas ou il s'agit de modifier un user on recupere l'id a partir de l'url
         this.id = this.route.snapshot.params['id'];
         if(this.id !=null){

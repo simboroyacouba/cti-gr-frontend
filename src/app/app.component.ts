@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
     userConnected = false;
     
     constructor(
-      private sanitizer: DomSanitizer,
         private formBuilder: FormBuilder,
         private accountService: AccountService, 
         private licenceService: LicenceService,
@@ -69,6 +68,7 @@ export class AppComponent implements OnInit {
                 this.userConnected = true;
             }
         this.accountService.user.subscribe(x => this.user = x);
+        
         this.listRoles = this.user?.roles;
         this.photo = `${environment.apiUrl}/api/auth/download?chemin=`+this.user?.profilePhoto?.replace(/\\/g, '/');
        

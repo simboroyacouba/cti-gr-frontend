@@ -53,6 +53,11 @@ export class AddEditComponent implements OnInit {
    
        
         this.userConnected = this.accountService.userValue;
+        this.accountService.getById(this.userConnected!.id!)
+        .subscribe((x) => {
+            this.userConnected = x;
+        });
+        
         this.accountService.getAllRoles()
         .subscribe((x) => {
           this.roleList = x;

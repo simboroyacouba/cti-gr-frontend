@@ -1,0 +1,100 @@
+﻿<div *ngIf="userConnected!.idBox != undefined" >
+    <div  *ngIf="actualSession === undefined ">
+        <button class="btn btn-primary" (click)="createSession()">Ouvrir une session</button>
+    </div>
+
+    <div  *ngIf="actualSession !== undefined && !ouvrirSession">
+        <button class="btn btn-warning" (click)="openActiveSession()">Ouvrir la session active (Ouverte le : {{actualSession.dateOuverture | date:'dd-MM-yyyy: hh:mm'}})</button>
+    </div>
+
+
+
+    <div *ngIf="actualSession !== undefined && ouvrirSession">
+            <div style="position: fixed; top: 100px; width:auto; background-color: rgb(236, 235, 235);">
+            <div class="card-list" >
+                <mat-card *ngFor="let article of articles" style="width: 200px; height: 200px;" (click)="ajouterArticle(article.id!, article.nom!,article.prixVente!)">
+                <mat-card-header>
+                    <mat-card-title>{{ article.nom }}</mat-card-title>
+                    <mat-card-subtitle>{{ article.prixVente }} {{entreprise.monnaie}}</mat-card-subtitle>
+                </mat-card-header>
+                <img width="200" height="100" mat-card-image [src]="article.photo" alt="Card Image">
+                <mat-card-content>
+                </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        
+
+        <div class="cart" style="position: fixed; right: 0; top: 100px; width: 27%; bottom: 80px; flex: 1;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+        <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="validerFacture()">
+            <main *ngIf="!invoiceActual">
+                <button  class="btn btn-success" (click)="creerFacture()">Créer une facturation</button>
+                <button  class="btn btn-danger" (click)="closeSession()">Fermer la session</button>
+            </main>
+            <main *ngIf="invoiceActual">
+                <div class="cart">
+                <div><b style="font-size: 30px;">Facture</b> </div><br>
+                    <table> 
+                        <tr>
+                            <td> <b>Nom</b> </td>
+                            <td><b>   Qté</b></td>
+                            <td><b>Prix</b></td>
+                            <td><b>Montant</b></td>
+                        </tr>
+                        
+                            <tr *ngFor="let artAVendre of articleAVendre">
+                                <td>{{ artAVendre.nomArticle}}</td>
+                                <td>
+                                    <mat-icon color="blue" (click)="retrancherQteArticle(artAVendre.idArticle!)">remove_circle_outline</mat-icon>
+                                    <a *ngIf="artAVendre.quantite!<10">0</a>{{ artAVendre.quantite}}
+                                    <mat-icon color="blue" (click)="augmenterQteArticle(artAVendre.idArticle!)">add_circle_outline</mat-icon>
+                                </td>
+                                <td>{{ artAVendre.prixUnitaire}}</td>
+                                <td>{{ artAVendre.montant}}</td> 
+                                <td>  <mat-icon color="blue" (click)="supprimerArticle(artAVendre.idArticle!)">clear</mat-icon></td>
+                        </tr>
+                    </table>
+                    </div>
+                
+            </main>
+            <div *ngIf="invoiceActual">
+                <div style="position: fixed; right: 0; bottom: 240px; width: 450px;">
+                    <div>Total : {{montantTotal}}</div>
+                </div>
+
+                <div style="position: fixed; right: 0; bottom: 160px; width: 450px;">
+                    <div><b style=" right: 0; font-size: 20px;">Montant à payer : {{montantAPayer}} {{entreprise.monnaie}}</b></div>
+                </div>
+
+                <div class ="row"style="position: fixed; right: 0; bottom: 160px; width: 450px;">
+                    <div class="mb-3 col">
+                        <label class="form-label"> Remise</label>
+                        <mat-slide-toggle formControlName="remiseBoolean"></mat-slide-toggle>
+                    </div>
+                    <div  *ngIf="remiseBoolean" class="mb-3 col">
+                        <input placeholder="Montant" type="number" formControlName="remise" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixAchat.errors }" />
+                    </div>
+                </div><br>
+
+                <div style="position: fixed; right: 0; bottom: 100px; width: 450px;">
+                    <button  class="btn btn-danger" style="position: fixed; right: 0; bottom: 100px;" (click)="viderPanier()"> Vider le panier</button>
+                </div>
+
+                <div style="position: fixed; right: 0; bottom: 100px; width: 450px;">
+                    <button class="btn btn-success" style="position: fixed; right: 250; bottom: 100px;" (click)="validerFacture()">Valider l'achat</button> 
+                </div>
+            </div>
+            
+            </form>
+           
+        </div>
+    </div>
+</div>
+
+<div *ngIf="userConnected!.idBox == undefined" >
+    Si vous etes un caissier assurez vous d'etre affecté à un point de vente
+</div>

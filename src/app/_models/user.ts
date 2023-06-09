@@ -14,7 +14,7 @@
     
     email?: string;
     
-    idBox?: Number;
+    idBox?: BigInt;
     
     registeredDate?: Date;
 
@@ -27,7 +27,7 @@
     actif?: boolean;
     profilePhoto?:string;
 
-    constructor(id?: BigInt, code?: string, firstName?: string, lastName?: string, username?: string, password?: string, email?: string, idBox?: Number, registeredDate?: Date, roles?: string[], token?: string, tokenType?: string,  actif?: boolean, profilePhoto?:string){
+    constructor(id?: BigInt, code?: string, firstName?: string, lastName?: string, username?: string, password?: string, email?: string, idBox?: BigInt, registeredDate?: Date, roles?: string[], token?: string, tokenType?: string,  actif?: boolean, profilePhoto?:string){
         
         this.id = id;
 

@@ -9,5 +9,9 @@ export class HomeComponent {
 
     constructor(private accountService: AccountService) {
         this.user = this.accountService.userValue;
+        this.accountService.getById(this.user!.id!)
+        .subscribe((x) => {
+            this.user = x;
+        });
     }
 }

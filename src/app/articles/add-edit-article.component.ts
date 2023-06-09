@@ -58,6 +58,10 @@ export class AddEditArticleComponent implements OnInit {
    
        
         this.userConnected = this.accountService.userValue;
+        this.accountService.getById(this.userConnected!.id!)
+        .subscribe((x) => {
+            this.userConnected = x;
+        });
         this.articleService.getAllTypeArticle()
         .subscribe((x) => {
             this.articleTypes = x;

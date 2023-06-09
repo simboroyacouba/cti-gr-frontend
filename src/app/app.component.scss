@@ -3,7 +3,9 @@ html {
     position: relative;
     min-height: 100%;
 }
-
+mat-grid-tile {
+  background: lightblue;
+}
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;

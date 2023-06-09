@@ -1,0 +1,58 @@
+﻿<h1>Points de vente</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un article</a>
+
+<div>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Nom</th>
+            <th style="width: 15%">actif</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let po of pos">
+            <td style="width: 15%">{{po.code}}</td>
+            <td style="width: 15%">{{po.nom}}</td>
+            <td style="width: 15%">{{po.actif}}</td>
+            
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{po.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                <!--<button *ngIf="article.actif == false" style="background-color: darkgreen;"  class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
+                    <span *ngIf="article.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!article.isDeleting">
+                
+                        <span >
+                            Activer
+                        </span>
+                    </span>
+                </button>
+
+                <button *ngIf="article.actif == true"  class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
+                    <span *ngIf="article.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!article.isDeleting">
+                        <span  >
+                            Désactiver
+                        </span> 
+                       
+                    </span>
+                </button>-->
+            </td>
+        </tr>
+        <tr *ngIf="!pos">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+  
+ 
+
+<button (click)="pageChang()" class="btn btn-sm btn-danger btn-delete-user">
+    print
+   </button>
+ 
+</div>

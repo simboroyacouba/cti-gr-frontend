@@ -50,6 +50,11 @@ export class ProfilComponent implements OnInit {
    
        
         this.userConnected = this.accountService.userValue as User;
+        this.accountService.getById(this.userConnected!.id!)
+        .subscribe((x) => {
+            this.userConnected = x;
+        });
+        
        // form with validation rules
         this.form = this.formBuilder.group({
             firstName: ['', Validators.required],

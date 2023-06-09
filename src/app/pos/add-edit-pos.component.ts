@@ -41,6 +41,11 @@ export class AddEditPosComponent implements OnInit {
     ngOnInit() {
  
         this.userConnected = this.accountService.userValue;  
+        this.accountService.getById(this.userConnected!.id!)
+        .subscribe((x) => {
+            this.userConnected = x;
+        });
+        
         this.caissiers = [];
         this.caissiersOnPos = [];
             this.accountService.getAll()
