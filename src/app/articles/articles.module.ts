@@ -9,6 +9,9 @@ import { ListArticleTypeComponent } from './list-articleType.component';
 import { AddEditArticleTypeComponent } from './add-edit-articleType.component';
 import { ListArticleComponent } from './list-article.component';
 import { AddEditArticleComponent } from './add-edit-article.component';
+
+import { RestockageArticleComponent } from './restockage-article.component';
+import { DepackageArticleComponent } from './depackage-article.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -16,6 +19,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms'; 
+import { MatDialogModule } from '@angular/material/dialog';
+import { ListApprovComponent } from './list-approv.component';
+import { ListDepackComponent } from './list-depack.component';
 
 @NgModule({
     imports: [
@@ -31,14 +37,19 @@ import { FormsModule } from '@angular/forms';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatDialogModule,
     ],
     declarations: [
         LayoutComponent,
         ListArticleComponent,
         AddEditArticleComponent,
         AddEditArticleTypeComponent,
-        ListArticleTypeComponent
+        ListArticleTypeComponent,
+        RestockageArticleComponent,
+        DepackageArticleComponent,
+        ListApprovComponent,
+        ListDepackComponent
     ]
 })
 export class ArticlesModule { }

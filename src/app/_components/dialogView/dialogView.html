@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{titre}}</h1>
+<div mat-dialog-content>
+  <table border="1">
+    <tr>
+      <td><b style="font-size: 20px;">Produit</b></td>
+      <td><b style="font-size: 20px;">Quantité</b></td>
+    </tr>
+    <tr *ngFor="let element of elements">
+      <td>  {{element.nom}}</td>
+      <td><a *ngIf="element.quantite < 10">0</a>{{element.quantite}}</td>
+    </tr>
+  </table>
+  <div>
+    
+  </div>
+</div>

@@ -1,0 +1,87 @@
+﻿<h1>Liste des approvisionnements</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un article</a>
+<a routerLink="listapprov" class="btn btn-sm btn-success mb-2">Liste des approvsionnements</a>
+<a routerLink="listdepack" class="btn btn-sm btn-success mb-2">Liste des dépacquetage</a>
+
+<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="getData()" >
+    <div class="row">
+        <div class="mb-3 col">
+            <label class="form-label">Type</label>
+            <div class="col-sm-10">
+                <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="appro" [ngClass]="{ 'is-invalid': submitted && f.appro.errors }">
+                    <option value="tout" selected="selected">Tout</option>
+                    <option value="approvisionnement">Augmentation de stock</option>
+                    <option value="desapprovisionnement">Diminution de stock</option>
+                </select>
+            </div>
+            <div *ngIf="submitted && f.appro.errors" class="invalid-feedback">
+                <div *ngIf="f.appro.errors.required">Le type est obligatoire</div>
+            </div>
+        </div>
+
+        <div class="mb-3 col">
+            <label class="form-label">Date inferieure</label>
+            <div class="col-sm-10">
+                <input type="date" formControlName="dateInferieure" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dateInferieure.errors }"/>
+            </div>
+            <div *ngIf="submitted && f.dateSuperieure.errors" class="invalid-feedback">
+                <div *ngIf="f.dateSuperieure.errors.required">La date est obligatoire</div>
+            </div>
+        </div>
+
+        <div class="mb-3 col">
+            <label class="form-label">Date superieure</label>
+            <div class="col-sm-10">
+                <input type="date" formControlName="dateSuperieure" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dateSuperieure.errors }"/>
+            </div>
+            <div *ngIf="submitted && f.dateSuperieure.errors" class="invalid-feedback">
+                <div *ngIf="f.dateSuperieure.errors.required">La date est obligatoire</div>
+            </div>
+        </div>
+    </div>
+    <button [disabled]="submitting" class="btn btn-primary" (click)="getData()">
+        <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+        Valider
+    </button>
+</form>
+<div>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Nom de l'article</th>
+            <th style="width: 15%">Quantité</th>
+            <th style="width: 15%">Montant</th>
+            <th style="width: 15%">motif</th>
+            <th style="width: 15%">Date</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let approvisionnement of approvisionnements">
+            <td style="width: 15%">{{approvisionnement.code}}</td>
+            <td style="width: 15%">{{getNomArticleById(approvisionnement.idArticle!)}}</td>
+            <td style="width: 15%">{{approvisionnement.quantite}}</td>
+            <td style="width: 15%">{{approvisionnement.montantTotal}} {{entreprise.monnaie}}</td>
+            
+            <td style="width: 15%">{{approvisionnement.motif}}</td>
+            <td style="width: 15%">{{approvisionnement.date | date:'dd-MM-yyyy: hh:mm'}}</td>
+            
+            <td><button class="btn btn-success" (click)="invoiceInfo(approvisionnement.id!)">Détails</button></td>
+        </tr>
+        <tr *ngIf="!approvisionnements">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+  
+ 
+
+<button (click)="pageChang()" class="btn btn-sm btn-danger btn-delete-user">
+    print
+   </button>
+ 
+</div>

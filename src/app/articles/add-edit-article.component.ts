@@ -76,7 +76,7 @@ export class AddEditArticleComponent implements OnInit {
         this.form = this.formBuilder.group({
           code: ['',],
             nom: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['',],
             codeBar: ['', ],
             prixVente: [, Validators.required],
             prixAchat: [, ],
@@ -99,6 +99,7 @@ export class AddEditArticleComponent implements OnInit {
               .subscribe((x) => {
                   this.form.patchValue(x);
                   console.log(x);
+                  this.articleAddOrEdit.code = x.code;
                   this.articleAddOrEdit.achat = x.achat;
                   this.photo = `${environment.apiUrl}/api/auth/download?chemin=`+x.photo?.replace(/\\/g, '/');
                   this.loading = false;
@@ -193,6 +194,27 @@ test(){
 
     onChanges(): void {
         this.form.valueChanges.subscribe(val => {
+
+          this.articleAddOrEdit.actif = true;//actif
+          this.articleAddOrEdit.achat = false;
+
+
+          this.articleAddOrEdit.id = this.id,//id
+          this.articleAddOrEdit.dateEnregistrement = undefined;//date enregistrement
+          this.articleAddOrEdit.code = undefined;//code
+          this.articleAddOrEdit.codeBar = this.form.get('codeBar')?.value;//codebar
+          this.articleAddOrEdit.nom = this.form.get('nom')?.value;//nom 
+          this.articleAddOrEdit.description = this.form.get('description')?.value;//description
+          this.articleAddOrEdit.prixVente = this.form.get('prixVente')?.value;//prix vente
+          this.articleAddOrEdit.prixAchat = this.form.get('prixAchat')?.value;//prix achat
+          this.articleAddOrEdit.idTypeArticle = this.form.get('idTypeArticle')?.value;//id type article
+          this.articleAddOrEdit.actif = this.form.get('actif')?.value;//actif
+          this.articleAddOrEdit.achat = this.form.get('achat')?.value;//achat
+          this.articleAddOrEdit.photo = this.form.get('photo')?.value;//photo
+          this.articleAddOrEdit.stock = this.form.get('stock')?.value;//stock
+          this.articleAddOrEdit.stockMin = this.form.get('stockMin')?.value;
+          console.log(this.articleAddOrEdit);
+          /*
             this.articleAddOrEdit = new Article(this.id,//id
                                     undefined,//date enregistrement
                                     undefined,//code
@@ -207,9 +229,10 @@ test(){
                                          this.form.get('photo')?.value,//photo
                                          this.form.get('stock')?.value ,//stock
                                          this.form.get('stockMin')?.value ,) ;//stock min
-
+            */
           });
-    }
+  
+        }
     
 
     // convenience getter for easy access to form fields

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import {MatGridListModule} from '@angular/material/grid-list';
 
 import { MatCardModule } from '@angular/material/card';
-
 import { MatTableModule} from '@angular/material/table';
 import { VenteRoutingModule } from './vente-routing.module';
 import { LayoutComponent } from './layout.component';
@@ -18,6 +17,9 @@ import { MatPaginatorModule} from '@angular/material/paginator';
 import { MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms'; 
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import { NgSelectModule } from '@ng-select/ng-select';
+
+
 
 @NgModule({
     imports: [
@@ -37,6 +39,7 @@ import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angula
         MatGridListModule,
         MatCardModule,
         MatDialogModule,
+        NgSelectModule,
     ],
     declarations: [
         LayoutComponent,

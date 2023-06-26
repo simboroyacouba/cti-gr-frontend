@@ -39,8 +39,8 @@ export class InvoiceService {
         return this.http.post<Invoice>(`${environment.apiUrl}/api/invoice/close`, {id});
     }
 
-    getActiveInvoice(): Observable<any>{
-        return this.http.get<Invoice[]>(`${environment.apiUrl}/api/invoice/getactive`);
+    getActiveInvoice(idSession: BigInt): Observable<any>{
+        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/invoice/getactive`, {idSession});
     }
 
     getByClient(id: BigInt, dateinf: Date, datesup: Date): Observable<any>{
@@ -53,7 +53,7 @@ export class InvoiceService {
 
     getbetweenDate(dateinf: Date, datesup: Date): Observable<any>{
         let id = undefined;
-        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/invoice//getbetweendate`, {id, dateinf, datesup});
+        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/invoice/getbetweendate`, {id, dateinf, datesup});
     }
 
     insertArticle(article: Article) {
@@ -61,7 +61,7 @@ export class InvoiceService {
     }
     
     // api pour recuperer les ventes d'articles
-    getSaleArticleBetweenDate(id: BigInt, dateinf: Date, datesup: Date): Observable<any>{
+    getSaleArticleBetweenDate(id: BigInt | undefined, dateinf: Date, datesup: Date): Observable<any>{
         return this.http.post<VenteArticle[]>(`${environment.apiUrl}/api/sale/getbyarticleid`, {id, dateinf, datesup});
     }
 

@@ -1,0 +1,103 @@
+﻿<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Dépacqueter</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Elements</li>
+        </ol>
+      </nav>
+
+      <section class="section">
+        <div style="width: auto;">
+
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title"><b>Dépacqueter l'article</b></h3>
+                
+                 <div class="row" *ngIf="articleADepacker">
+                        <div class="mb-3 col">
+                            <label class="form-label">code de l'article</label>
+                            <div class="col-sm-10">
+                                <input type="text" [value]="articleADepacker.code" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="mb-3 col">
+                            <label class="form-label">Nom de l'article</label>
+                            <div class="col-sm-10">
+                                <input type="text" [value]="articleADepacker.nom" class="form-control" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <form *ngIf="articles" [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Quantité a dépacqueter</label>
+                            <input min="1" type="number" formControlName="quantiteArticleDimunition" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.quantiteArticleDimunition.errors }" />
+                            <div *ngIf="submitted && f.quantiteArticleDimunition.errors" class="invalid-feedback">
+                                <div *ngIf="f.quantiteArticleDimunition.errors.required">La quantité est obligatoire</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Article  obtenu</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idArticleAjout" 
+                                    [ngClass]="{ 'is-invalid': submitted && f.idArticleAjout.errors }">
+                                    <option *ngFor="let article of articles" [value]="article.id">{{article.nom }}</option>
+                                </select>
+                                <div *ngIf="submitted && f.idArticleAjout.errors" class="invalid-feedback">
+                                    <div *ngIf="f.idArticleAjout.errors.required">Veuillez choisir l'article</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col">
+                            <label class="form-label">code de l'article</label>
+                            <div class="col-sm-10">
+                                <input type="text" [value]="getCodeArticleById(depacketage.idArticleAjout!)" class="form-control" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Quantité obtenue </label>
+                            <input min="1" type="number" min="1" formControlName="quantiteArticleAjout" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.quantiteArticleAjout.errors }" />
+                            <div *ngIf="submitted && f.quantiteArticleAjout.errors" class="invalid-feedback">
+                                <div *ngIf="f.quantiteArticleAjout.errors.required">La quantité est obligatoire</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Motif</label>
+                            <input type="text" formControlName="motif" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.motif.errors }" />
+                            <div  *ngIf="submitted && f.motif.errors" class="invalid-feedback">
+                                <div *ngIf="f.motif.errors.required">Le motif est obligatoire</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <div class="mb-3">
+                        <button [disabled]="submitting" class="btn btn-primary">
+                            <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
+                <div *ngIf="loading" class="text-center m-5">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </div>
+
+    

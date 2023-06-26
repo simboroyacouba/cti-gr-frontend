@@ -1,0 +1,37 @@
+﻿<h1>Clients</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un client</a>
+
+<div>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Nom, prénom</th>
+            <th style="width: 10%">Téléphone</th>
+            <th style="width: 15%">actif</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let client of clients">
+            <td style="width: 15%">{{client.code}}</td>
+            <td style="width: 15%">{{client.nom}} {{client.prenom}}</td>
+            <td style="width: 15%">{{client.telephone}}</td>
+            <td style="width: 15%">{{client.actif}}</td>
+            
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{client.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                
+            </td>
+        </tr>
+        <tr *ngIf="!clients">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+  
+ 
+ 
+</div>

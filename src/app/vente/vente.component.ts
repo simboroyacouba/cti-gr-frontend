@@ -15,9 +15,15 @@ import { Session } from '@app/_models/Session';
 import { Entreprise } from '@app/_models/Entreprise';
 import { VenteArticle } from '@app/_models/VenteArticle';
 import { MatDialog } from '@angular/material/dialog';
+import { Client } from '@app/_models/Client';
+import { ClientService } from '@app/_services/clientService';
+
+import { AlertDialog } from '@app/_components/alertDialog/AlertDialog';
+import { DialogInfo } from '@app/_components/dialogInfo/DialogInfo';
 
 @Component({ templateUrl: 'vente.component.html' ,
-              styleUrls: ['list-vente.component.scss'],})
+              styleUrls: ['list-vente.component.scss'],
+            })
 
 
 export class VenteComponent implements OnInit {
@@ -25,6 +31,7 @@ export class VenteComponent implements OnInit {
     loading = false;
     submitting = false;
     submitted = false;
+    clients!: Client[];//liste des clients
     userConnected!: User | null;//contient les infos de l'utilisateur connecté
     articles!: Article[];//contien la liste des articles
     ouvrirSession = false;//varriable pour afficher soit le pos ou ouvrir session active
@@ -53,6 +60,7 @@ export class VenteComponent implements OnInit {
         private alertService: AlertService,
         private sessionService: SessionService,
         public dialog: MatDialog,
+        private clientService: ClientService
         
     ) {}
 
@@ -61,61 +69,33 @@ export class VenteComponent implements OnInit {
         this.montantAPayer = 0;
         this.articleAVendre = [];
         this.userConnected = this.accountService.userValue;
+
+        //récuperer l'utilisateur connecté
         this.accountService.getById(this.userConnected!.id!)
         .subscribe((x) => {
             this.userConnected = x;
+            this.getActiveSession();
         });
 
-        this.idClient = this.userConnected!.id!;//à corriger
+        //recupérer la liste des clients
+        this.clientService.getAll().subscribe({
+            next: (value: Client[]) => this.clients = value,
+            error: (error: any) => { }
+          });
 
-        this.accountService.getById(this.userConnected!.id!)
-        .subscribe((x) => {
-            this.userConnected = x;
-        });
-
-        //recuperer lzq aticles a afficher dans le POS
-        this.articleService.getAll()
-        .subscribe((x) => {
-            
-            for(let i=0; i<x.length ; i++){
-                x[i].photo = `${environment.apiUrl}/api/auth/download?chemin=`+x[i].photo?.replace(/\\/g, '/');
-            }
-            this.articles = x;
-        });
+        //recuperer leq aticles a afficher dans le POS
+        this.getArticles();
 
         this.accountService.getEntreprise()
         .subscribe((x) => {
             this.entreprise = x;
         });
 
-        //s'il y a une facturation en cours la récuperer
-        this.invoiceService.getActiveInvoice()
-        .subscribe({
-            next :(x) => {
-                if(x != undefined){
-                    this.invoiceActual = x;
-                }
-        }, 
-            error: error => {
-                this.alertService.error(error);
-            }
-        });
-        
-        //S'il y a une session active la récupérer
-        this.sessionService.getAvtiveSession()
-        .subscribe({
-            next :(x) => {
-                if(x != undefined){
-                    this.actualSession = x;
-                }
-        }, 
-            error: error => {
-                this.alertService.error(error);
-            }
-        });
+       
        
         // form with validation rules
         this.form = this.formBuilder.group({
+                    idClient: [,],
                     remiseBoolean: [,],
                     remise: [,],
         });
@@ -124,6 +104,45 @@ export class VenteComponent implements OnInit {
         this.calculerMotant(); // actaliser les valeurs a chaque modification du formulaire
     }
    
+    getActualInvoice(){
+        //s'il y a une facturation en cours la récuperer
+        this.invoiceService.getActiveInvoice(this.actualSession!.id!)
+        .subscribe({
+            next :(x) => {
+                if(x != undefined){
+                    this.invoiceActual = x;
+                }
+        }, 
+        error: error => {
+            this.alertService.error(error);
+        }
+        });
+    }
+    getArticles(){
+        this.articleService.getAll()
+        .subscribe((x) => {
+            
+            for(let i=0; i<x.length ; i++){
+                x[i].photo = `${environment.apiUrl}/api/auth/download?chemin=`+x[i].photo?.replace(/\\/g, '/');
+            }
+            this.articles = x;
+        });
+    }
+    getActiveSession(){
+        //S'il y a une session active la récupérer
+        this.sessionService.getAvtiveSession(this.userConnected!.idBox!)
+        .subscribe({
+            next :(x) => {
+                if(x != undefined){
+                    this.actualSession = x;
+                    this.getActualInvoice();
+                }
+        }, 
+            error: error => {
+                this.alertService.error(error);
+            }
+        });
+    }
       
       public itemsToString(value:Array<any> = []):string {
         return value
@@ -133,7 +152,7 @@ export class VenteComponent implements OnInit {
       }
       
       ajouterArticle(idArticle:BigInt, nomArticle:string, prixUnitaire:number): void {
-        
+       
         if(this.invoiceActual != undefined){
                 let articleOnCart = false;
             if(this.articleAVendre.length == 0){
@@ -217,12 +236,13 @@ export class VenteComponent implements OnInit {
     }
     viderPanier(){
         this.articleAVendre = [];
+        this.montantTotal = 0;
+        this.montantAPayer = 0;
     }
 
+   
     creerFacture(): void {
-        if(this.idClient == undefined){
-            this.idClient = BigInt(1)  ;
-        }
+        
         this.invoiceActual = new Invoice(undefined,//id
             undefined,//code
             this.userConnected!.id,//id caissier
@@ -232,12 +252,15 @@ export class VenteComponent implements OnInit {
             undefined,//remise
             undefined,//montant à payer
             undefined,//clos
-            undefined)//date
-            //creer la facture
-        this.invoiceService.insert(this.invoiceActual)
+            undefined);//date
+
+            
+        //creer la facture
+        console.log(this.invoiceActual);
+        this.invoiceService.insert(this.invoiceActual!)
         .subscribe({
             next :(x) => {
-                this.invoiceService.getActiveInvoice()
+                this.invoiceService.getActiveInvoice(this.actualSession!.id!)
                 .subscribe({
                     next :(y) => {
                         if(y != undefined){
@@ -249,66 +272,94 @@ export class VenteComponent implements OnInit {
                     }
                 });
             }, 
-            error: error => {
-                this.alertService.error(error);
+            error: (error) => {
+                this.alertService.error(error.message);
             }
         });
       }
-
-    validerFacture(): void {
-        this.invoiceActual!.montantTotal = this.montantTotal;
-        this.invoiceActual!.remise = this.remise;
-        this.invoiceActual!.montantAPayer = this.montantAPayer!;
-        
-        //ajouter les montants a la facture
-        if(this.montantTotal>0 && this.montantAPayer>0){
-            this.invoiceService.addamount(this.invoiceActual!)
-            .subscribe({
-                next :(x) => {
-                    this.invoiceService.close(this.invoiceActual!.id!)
-                    .subscribe({
-                        next :(y) => {
-                            for(const artAVendre of this.articleAVendre){
-                                try {
-                                    this.invoiceService.insertArticle(new VenteArticle(undefined,//id
-                                                                                undefined,//date
-                                                                                artAVendre.idArticle,//idArticle
-                                                                                artAVendre.idSession,//idsession
-                                                                                artAVendre.idFacture,//idfacture
-                                                                                artAVendre.quantite,//quantite
-                                                                                artAVendre.prixUnitaire//prixUnitaire
-                                                                                ))
-                                    .subscribe({
-                                        next :(z) => { }, 
-                                        error: error => {
-                                            this.alertService.error(error);
-                                        }
-                                    });
-                                } catch (error) {
-                                }
-                            
-                            }
-                            this.invoiceActual = undefined;
-                            this.ngOnInit();
-                        }, 
-                        error: error => {
-                            this.alertService.error(error);
-                        }
-                    });
-                }, 
-                error: error => {
-                    this.alertService.error(error);
+     
+/*
+      validerFacture(): void {
+        this.loading = true;
+        this.getArticles;
+        let validerLaVente :boolean = true;
+        for(let i=0; i<this.articleAVendre.length ; i++){
+            for(let a=0; a<this.articles.length ; a++){
+                if(this.articleAVendre[i].idArticle == this.articles[a].id){
+                    if(this.articles[a].stock! < this.articleAVendre[i].quantite!){
+                        validerLaVente = false;
+                        break;
+                    }
                 }
-            });
+            }
+            
         }
+        
+        
+        if(validerLaVente == true){
+            
+            this.invoiceActual!.montantTotal = this.montantTotal;
+            this.invoiceActual!.remise = this.remise;
+            this.invoiceActual!.montantAPayer = this.montantAPayer!;
+            this.invoiceActual!.idClient = this.idClient;
+            //ajouter les montants a la facture
+            if(this.montantTotal>0 && this.montantAPayer>0){
+                this.invoiceService.addamount(this.invoiceActual!)
+                .subscribe({//ajouter les montant a la facture
+                    next :(x) => {
+                        this.invoiceService.close(this.invoiceActual!.id!)
+                        .subscribe({// fermer la facture
+                            next :(y) => {
+                                for(const artAVendre of this.articleAVendre){//boucle pour enregister tous les produits dans la table vente
+                                    try {
+                                        this.invoiceService.insertArticle(new VenteArticle(undefined,//id
+                                                                                    undefined,//date
+                                                                                    artAVendre.idArticle,//idArticle
+                                                                                    artAVendre.idSession,//idsession
+                                                                                    artAVendre.idFacture,//idfacture
+                                                                                    artAVendre.quantite,//quantite
+                                                                                    artAVendre.prixUnitaire//prixUnitaire
+                                                                                    ))
+                                        .subscribe({
+                                            next :(z) => { }, 
+                                            error: error => {
+                                                this.alertService.error(error);
+                                            }
+                                        });
+                                    } catch (error) {
+                                    }
+                                
+                                }
+                                this.invoiceActual = undefined;
+                                this.ngOnInit();
+                            }, 
+                            error: error => {
+                                this.alertService.error(error);
+                            }
+                        });
+                    }, 
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                });
+            }
+        }
+        else{
+            const dialogRef = this.dialog.open(DialogInfo, {
+                data: {name: "Un poduit dans la liste que vous eaayez de vendre a sin stock épuisé"},
+              });
+        }
+        this.loading = false;
+        
     }
 
-    
+   */ 
     // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
 
     onChanges(): void {
         this.form.valueChanges.subscribe(val => {
+            this.idClient = this.form.get('idClient')?.value;
             this.remise = this.form.get('remise')?.value;
             this.remiseBoolean = this.form.get('remiseBoolean')?.value;
             this.calculerMotant();
@@ -338,7 +389,7 @@ export class VenteComponent implements OnInit {
         .subscribe({
             next :(x) => {
                 //this.actualSession!.id = BigInt(x.message!);
-                this.sessionService.getAvtiveSession()
+                this.sessionService.getAvtiveSession(this.userConnected!.idBox!)
                 .subscribe({
                     next :(x) => {
                     if(x != undefined){
@@ -359,16 +410,126 @@ export class VenteComponent implements OnInit {
     }
     
     closeSession(){
-        this.sessionService.closeSession(this.actualSession!.id! as BigInt)
-            .subscribe({
-                next :(x) => {
-                    this.actualSession = undefined;
-            }, 
-                error: error => {
-                    this.alertService.error(error);
-                }
+        const dialogRef = this.dialog.open(AlertDialog, {
+            data: {name: "Voulez vous fermer la session ?"},
+            });
+          dialogRef.afterClosed().subscribe(result => {
+            if(result === true){
+                this.sessionService.closeSession(this.actualSession!.id! as BigInt)
+                .subscribe({
+                    next :(x) => {
+                        this.actualSession = undefined;
+                }, 
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                });
+            }else{console.log('ne pasfermer');}
+          
         });
     }
     
-    
+    validerVente(): void/*boolean | undefined*/ {
+
+        this.loading = true;
+        this.getArticles;
+        let validerLaVente :boolean = true;
+        for(let i=0; i<this.articleAVendre.length ; i++){
+            for(let a=0; a<this.articles.length ; a++){
+                if(this.articleAVendre[i].idArticle == this.articles[a].id){
+                    if(this.articles[a].achat == true){
+                        if(this.articles[a].stock! < this.articleAVendre[i].quantite!){
+                        validerLaVente = false;
+                        break;
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        
+        if(validerLaVente == true){
+            if(this.articleAVendre.length > 0){
+            const dialogRef = this.dialog.open(AlertDialog, {
+            data: {name: "Voulez vous valider la vente?"},
+            });
+            let resultat = false;
+            this.loading = true;
+            dialogRef.afterClosed().subscribe(result => {
+            resultat = result;
+            if(resultat === true){
+                this.invoiceActual!.montantTotal = this.montantTotal;
+                this.invoiceActual!.remise = this.remise;
+                this.invoiceActual!.montantAPayer = this.montantAPayer!;
+                this.invoiceActual!.idClient = this.idClient;
+                //ajouter les montants a la facture
+                if(this.montantTotal>0 && this.montantAPayer>0){
+                    this.invoiceService.addamount(this.invoiceActual!)
+                    .subscribe({//ajouter les montant a la facture
+                        next :(x) => {
+                            this.invoiceService.close(this.invoiceActual!.id!)
+                            .subscribe({// fermer la facture
+                                next :(y) => {
+                                    for(const artAVendre of this.articleAVendre){//boucle pour enregister tous les produits dans la table vente
+                                        try {
+                                            this.invoiceService.insertArticle(new VenteArticle(undefined,//id
+                                                                                        undefined,//date
+                                                                                        artAVendre.idArticle,//idArticle
+                                                                                        artAVendre.idSession,//idsession
+                                                                                        artAVendre.idFacture,//idfacture
+                                                                                        artAVendre.quantite,//quantite
+                                                                                        artAVendre.prixUnitaire//prixUnitaire
+                                                                                        ))
+                                            .subscribe({
+                                                next :(z) => { }, 
+                                                error: error => {
+                                                    this.alertService.error(error);
+                                                }
+                                            });
+                                        } catch (error) {
+                                        }
+                                    
+                                    }
+                                    this.invoiceActual = undefined;
+                                    this.ngOnInit();
+                                }, 
+                                error: error => {
+                                    this.alertService.error(error);
+                                }
+                            });
+                        }, 
+                        error: error => {
+                            this.alertService.error(error);
+                        }
+                    });
+                }
+                }else{console.log('ne pas vendre');}
+            
+            });
+        }
+        
+        
+        }else{
+            const dialogRef = this.dialog.open(DialogInfo, {
+                data: {name: "Un poduit dans la liste que vous eaayez de vendre a son stock épuisé"},
+            });
+        }
+        this.loading = false;
+    }
+
+    fermerFacture(){
+        this.loading = true;
+        this.invoiceService.close(this.invoiceActual!.id!)
+        .subscribe({// fermer la facture
+            next :(y) => {
+                this.invoiceActual = undefined;
+            }, 
+            error: error => {
+                this.alertService.error(error);
+            }
+        });
+        this.loading = false;
+    }
 }

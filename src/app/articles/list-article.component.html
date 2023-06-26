@@ -1,6 +1,21 @@
 ﻿<h1>Articles</h1>
 <a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un article</a>
+<a routerLink="listapprov" class="btn btn-sm btn-success mb-2">Liste des approvsionnements</a>
+<a routerLink="listdepack" class="btn btn-sm btn-success mb-2">Liste des dépacquetage</a>
 
+<div>
+    <ul class="hList">
+        <a  class="menu">
+        <h2 class="menu-title">Export</h2>
+        <ul class="menu-dropdown">
+            <li><p (click)="exportPDF(true)">PDF pour clients</p></li>
+            <li><p (click)="exportPDF(false)">PDF pour l'entreprise</p></li>
+            <li><p (click)="exportExcel()" >Excel</p></li>
+        </ul>
+        </a>
+    </ul>  
+</div>
+    
 <div>
   <table class="table table-striped">
     <thead>
@@ -10,7 +25,7 @@
             <th style="width: 15%">Prix d'achat</th>
             <th style="width: 15%">Prix de vente</th>
             <th style="width: 15%">quantité en stock</th>
-            <th style="width: 15%">Email</th>
+            <th style="width: 15%">stockable</th>
             <th style="width: 10%"></th>
         </tr>
     </thead>
@@ -18,12 +33,16 @@
         <tr *ngFor="let article of articles">
             <td style="width: 15%">{{article.code}}</td>
             <td style="width: 15%">{{article.nom}}</td>
-            <td style="width: 15%">{{article.description}}</td>
-            <td style="width: 15%">{{article.stock}}</td>
+            <td style="width: 15%">{{article.achat}}</td>
+            <td style="width: 15%">{{article.prixAchat}} {{entreprise.monnaie}}</td>
+            <td style="width: 15%">{{article.prixVente}} {{entreprise.monnaie}}</td>
             
             <td style="width: 15%">{{article.stockMin}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{article.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                
+                <a routerLink="restockage/{{article.id}}" class="btn btn-sm btn-primary me-1">restocker</a>
+                <a *ngIf="article.achat == true" routerLink="depackage/{{article.id}}" class="btn btn-sm btn-primary me-1">Dépackquer</a>
                 <!--<button *ngIf="article.actif == false" style="background-color: darkgreen;"  class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
                     <span *ngIf="article.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!article.isDeleting">
@@ -56,8 +75,6 @@
   
  
 
-<button (click)="pageChang()" class="btn btn-sm btn-danger btn-delete-user">
-    print
-   </button>
+<
  
 </div>

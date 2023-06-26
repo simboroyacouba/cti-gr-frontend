@@ -11,6 +11,8 @@ import { Message } from '@app/_models/message';
 import { Photo } from '@app/_models/photo';
 import { Article } from '@app/_models/Article';
 import { ArticleType } from '@app/_models/ArticleType';
+import { Approvisionnement } from '@app/_models/approvisionnement';
+import { Depacketage } from '@app/_models/depacketage';
 
 @Injectable({ providedIn: 'root' })
 export class ArticleService {
@@ -68,4 +70,32 @@ export class ArticleService {
         return this.http.post<Message>(`${environment.apiUrl}/api/articletype/update`,articleType);
     }
     
+
+    //liste des api pour le restockage
+    restocker(approvisionnement: Approvisionnement) {
+        return this.http.post<Message>(`${environment.apiUrl}/api/rawmaterial/restockage`, approvisionnement);
+    }
+
+    
+    getOneApprovisionnement(id: BigInt){
+        return this.http.post<Approvisionnement>(`${environment.apiUrl}/api/rawmaterial/getrestockage`,  {id});
+    }
+
+    getAllApprovisionnement(id: BigInt|undefined, dateinf: Date, datesup: Date){
+        return this.http.post<Approvisionnement[]>(`${environment.apiUrl}/api/rawmaterial/getrestockage`, {id, dateinf, datesup});
+    }
+
+    //liste des api pour le depaquetage
+    depaquetage(depacketage: Depacketage) {
+        return this.http.post<Message>(`${environment.apiUrl}/api/rawmaterial/depaquetage`, depacketage);
+    }
+
+    
+    getOneDepaquetage(id: BigInt): Observable<any>{
+        return this.http.post<Depacketage>(`${environment.apiUrl}/api/rawmaterial/getonedepaquetage`, {id});
+    }
+
+    getAllDepaquetageBetweenDate(id: BigInt|undefined, dateinf: Date|undefined, datesup: Date|undefined): Observable<any>{
+        return this.http.post<Depacketage[]>(`${environment.apiUrl}/api/rawmaterial/getdepaquetage`, {id, dateinf, datesup});
+    }
 }

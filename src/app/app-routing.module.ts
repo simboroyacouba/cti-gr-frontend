@@ -7,8 +7,8 @@ import { AuthGuard } from './_helpers';
 
 import { AppComponent } from './app.component';
 
-
-
+const fournisseurModule = () => import('./fournisseur/fournisseur.module').then(x => x.FournisseurModule);
+const clientModule = () => import('./client/client.module').then(x => x.ClientModule);
 const rapportVenteModule = () => import('./rapportVente/rapportVente.module').then(x => x.RapportVenteModule);
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
@@ -19,6 +19,8 @@ const venteModule = () => import('./vente/vente.module').then(x => x.VenteModule
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'fournisseur',  loadChildren: fournisseurModule, canActivate: [AuthGuard] },
+    { path: 'client',  loadChildren: clientModule, canActivate: [AuthGuard] },
     { path: 'rapport',  loadChildren: rapportVenteModule, canActivate: [AuthGuard] },
     { path: 'vente',  loadChildren: venteModule, canActivate: [AuthGuard] },
     { path: 'articles',  loadChildren: articlesModule, canActivate: [AuthGuard] },

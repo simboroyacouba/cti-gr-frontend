@@ -10,7 +10,7 @@ export class Entreprise {
     pays?: string;
     ville?: string;
     texte1?: string;
-    texte2?: String;
+    texte2?: string;
     texte3?: string;
     texte4?: string;
     image?: string;
@@ -26,7 +26,7 @@ export class Entreprise {
             pays?: string,
             ville?: string,
             texte1?: string,
-            texte2?: String,
+            texte2?: string,
             texte3?: string,
             texte4?: string,
             image?: string){

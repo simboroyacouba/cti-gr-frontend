@@ -1,20 +1,31 @@
 ﻿<h1>Facturation</h1>
 <div>
+    
     <form  [formGroup]="formFacturation" (ngSubmit)="onSubmit()">
+    <div class="mb-3 col" >
+        <label class="form-label">Rechercher par par</label>
+        <div class="col-sm-10">
+            <select class="form-select" aria-label="Default select example"  formControlName="rechercherPar">
+                <option value="tous">Tous</option>
+                <option value="client">Client</option>
+                <option value="pos">Point de vente</option>
+                <option value="caissier">Caissier</option>
+                <option value="session">Session</option>
+            </select>
+            
+        </div>
+    </div>
         <div class="row">
-               <div class="mb-3 col">
-                <label class="form-label">Client</label>
-                <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idClient" >
-                        <option *ngFor="let caissier of caissierList" [value]="caissier.id">{{caissier.firstName }}</option>
-                    </select>
-                    <div *ngIf="submitted && fFacturation.idTypeArticle.errors" class="invalid-feedback">
-                        <div *ngIf="fFacturation.idTypeArticle.errors.required">Le prix de vente est obligatoire</div>
-                    </div>
-                </div>
+            <div class="mb-3 col" *ngIf="rechercherPar == 'client'">
+            <label class="form-label">Client</label>
+            <div class="col-sm-10">
+                <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idClient" >
+                    <option *ngFor="let client of clientList" [value]="client.id">{{client.nom}} {{client.prenom}}</option>
+                </select>
+            </div>
             </div>
 
-            <div class="mb-3 col">
+            <div class="mb-3 col" *ngIf="rechercherPar == 'pos'">
                 <label class="form-label">Point de vente</label>
                 <div class="col-sm-10">
                     <select class="form-select" aria-label="Default select example"  formControlName="idPos">
@@ -24,15 +35,20 @@
                 </div>
             </div>
 
-            <div class="mb-3 col">
-                <label class="form-label">Caissier</label>
+            <div class="mb-3 col" *ngIf="rechercherPar == 'caissier'">
+                <label class="form-label" >Caissier</label>
                 <div class="col-sm-10">
                     <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idCaissier">
                         <option *ngFor="let caissier of caissierList" [value]="caissier.id">{{caissier.firstName }} {{caissier.lastName }}</option>
                     </select>
-                    <div *ngIf="submitted && fFacturation.idTypeArticle.errors" class="invalid-feedback">
-                        <div *ngIf="fFacturation.idTypeArticle.errors.required">Le prix de vente est obligatoire</div>
-                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="mb-3 col" *ngIf="rechercherPar == 'session'">
+                <label class="form-label">session</label>
+                <div class="col-sm-10">
+                    <input type="text" formControlName="codeSession" class="form-control" [ngClass]="{ 'is-invalid': submitted && fFacturation.codeSession.errors }" />  
                 </div>
             </div>
 
@@ -43,7 +59,10 @@
                 <div class="mb-3 col">
                     <label class="form-label">Date inferieure</label>
                     <div class="col-sm-10">
-                        <input type="date" formControlName="dateInferieure" class="form-control"  />
+                        <input type="date" formControlName="dateInferieure" class="form-control" [ngClass]="{ 'is-invalid': submitted && fFacturation.dateInferieure.errors }" />
+                    </div>
+                    <div *ngIf="submitted && fFacturation.dateInferieure.errors" class="invalid-feedback">
+                        <div *ngIf="fFacturation.dateInferieure.errors.required">Veuillez choisir une date</div>
                     </div>
             </div>
             
@@ -51,58 +70,72 @@
             <div class="mb-3 col">
                 <label class="form-label">Date superieure</label>
                 <div class="col-sm-10">
-                    <input type="date" formControlName="dateSuperieure" class="form-control"/>
+                    <input type="date" formControlName="dateSuperieure" class="form-control" [ngClass]="{ 'is-invalid': submitted && fFacturation.dateSuperieure.errors }"/>
+                </div>
+                <div *ngIf="submitted && fFacturation.dateSuperieure.errors" class="invalid-feedback">
+                    <div *ngIf="fFacturation.dateSuperieure.errors.required">Veuillez choisir une date</div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" (click)="getDataForm()">
+        <button class="btn btn-primary" >
             Valider
         </button>
-    </form>
+       
+    </form> 
 </div>
-
 <div>
+    <ul class="hList">
+        <a  class="menu">
+        <h2 class="menu-title">Export</h2>
+        <ul class="menu-dropdown">
+            <li><p (click)="exportPDF()">PDF</p></li>
+            <li><p (click)="exportExcel()">Excel</p></li>
+        </ul>
+        </a>
+    </ul>  
+</div>
+<div>
+    <table>
+        <tr>
+            <th style="width: 25%"></th>
+            <th style="width: 25%"> Total des montants</th>
+            <th style="width: 25%">Total des Remise</th>
+            <th style="width: 25%">Total des Montant à payer</th>
+        </tr>
+        <tr>
+            <th style="width: 25%"></th>
+            <th style="width: 25%" style="font-size: 20px; color: darkgreen;">{{totalMontant}} {{entreprise.monnaie}}</th>
+            <th style="width: 25%" style="font-size: 20px; color: darkgreen;">{{totalRemise}} {{entreprise.monnaie}}</th>
+            <th style="width: 25%" style="font-size: 20px; color: darkgreen;">{{totalMontantAPayer}} {{entreprise.monnaie}}</th>
+        </tr>
+    </table>
+    <br>
     <table class="table table-striped">
         <thead>
+            
             <tr>
-                <th style="width: 25%">Montat total</th>
+                <th style="width: 25%">Code</th>
+                <th style="width: 25%">Montant total</th>
                 <th style="width: 25%">Remise</th>
                 <th style="width: 25%">Montant à payer</th>
+                <th style="width: 100%">Date</th>
             </tr>
         </thead>
         <tbody>
         
             <tr *ngFor="let invoice of invoices">
-                <td style="width: 25%">{{invoice!.montantTotal!}}</td>
-                <td style="width: 25%">{{invoice.remise}}</td>
-                <td style="width: 25%">{{invoice.montantAPayer}}</td>
+                <td style="width: 25%">{{invoice!.code!}}</td>
+                <td style="width: 25%">{{invoice!.montantTotal!}}  {{entreprise.monnaie}}</td>
+                <td style="width: 25%">
+                    <a *ngIf="invoice.remise == undefined">0</a> 
+                    <a *ngIf="invoice.remise">{{invoice.remise}}</a> 
+                    {{entreprise.monnaie}}
+                </td>
+                <td style="width: 25%">{{invoice.montantAPayer}} {{entreprise.monnaie}}</td>
+                <td style="width: 10%">{{invoice.date | date:'dd-MM-yyyy: hh:mm'}}</td>
+                <td><button class="btn btn-success" (click)="invoiceInfo(invoice.id!)">Détails</button></td>
             </tr>
             
         </tbody>
       </table>
 </div>
-<!--<div>
-  <table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width: 25%">nom</th>
-            <th style="width: 25%">Quantité</th>
-            <th style="width: 25%">Prix de vente</th>
-            <th style="width: 25%">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-    
-        <tr *ngFor="let vntArticle of venteArticles">
-            <td style="width: 25%">{{getNomArticleById(vntArticle!.idArticle!)}}</td>
-            <td style="width: 25%">{{vntArticle.quantite}}</td>
-            <td style="width: 25%">{{vntArticle.prixUnitaire}}</td>
-            <td style="width: 25%">{{vntArticle.date | date:'dd-MM-yyyy: hh:mm'}}</td>
-            
-            <td style="white-space: nowrap"></td>
-        </tr>
-        
-    </tbody>
-  </table>
- 
-</div>-->
