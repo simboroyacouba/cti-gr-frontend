@@ -1,2 +1,7 @@
 ﻿
-<div id="container"></div>
+<div *ngIf="!loading" >
+    <div id="container"></div>
+</div>
+<div *ngIf="loading" class="text-center m-5">
+    <span class="spinner-border spinner-border-lg align-center"></span>
+</div>

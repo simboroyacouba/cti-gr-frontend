@@ -218,7 +218,6 @@ export class VenteComponent implements OnInit {
         this.sessionService.getOne(idSession)//recupperer la session dont on veut imprimer le rapport
         .subscribe((x) => {
             session = x;
-    console.log(session.id);
             this.invoiceService.getBySession(session.id!)//recuperer les facturations de la session
             .subscribe((y) => {
                 invoicesRapport = y;
