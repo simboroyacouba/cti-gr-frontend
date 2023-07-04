@@ -117,6 +117,7 @@
                 <th style="width: 25%">Code</th>
                 <th style="width: 25%">Montant total</th>
                 <th style="width: 25%">Remise</th>
+                <th style="width: 25%">TVA</th>
                 <th style="width: 25%">Montant à payer</th>
                 <th style="width: 100%">Date</th>
             </tr>
@@ -129,6 +130,11 @@
                 <td style="width: 25%">
                     <a *ngIf="invoice.remise == undefined">0</a> 
                     <a *ngIf="invoice.remise">{{invoice.remise}}</a> 
+                    {{entreprise.monnaie}}
+                </td>
+                <td style="width: 25%">
+                    <a *ngIf="!invoice.tva">0</a> 
+                    <a *ngIf="invoice.tva">{{invoice.tva}}</a> 
                     {{entreprise.monnaie}}
                 </td>
                 <td style="width: 25%">{{invoice.montantAPayer}} {{entreprise.monnaie}}</td>

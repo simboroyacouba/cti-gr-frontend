@@ -13,6 +13,8 @@ export class Invoice {
 	montantTotal?: number;
 	 
 	remise?: number;
+
+    tva?: number;
 	 
 	montantAPayer?: number;
 	 
@@ -33,6 +35,8 @@ export class Invoice {
         montantTotal?: number,
          
         remise?: number,
+        
+        tva?: number,
          
         montantAPayer?: number,
          
@@ -53,6 +57,8 @@ export class Invoice {
             this.montantTotal = montantTotal
              
             this.remise = remise;
+
+            this.tva = tva;
              
             this.montantAPayer = montantAPayer;
              

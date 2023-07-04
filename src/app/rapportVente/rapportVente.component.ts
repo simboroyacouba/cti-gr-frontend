@@ -23,7 +23,7 @@ import { environment } from '@environments/environment';
 
 export class RapportVenteComponent implements OnInit {
     venteArticles!: VenteArticle[];//contient la liste des articles vendus 
-    venteArticleGroupe!: VenteArticle[];//contient la liste des articles vendus groupés pour avour les quantitées
+    venteArticleGroupe!: VenteArticle[];//contient la liste des articles vendus groupés pour avoir les quantitées
     form!: FormGroup;
     articles!: Article[];
     entreprise!:Entreprise;
@@ -76,12 +76,18 @@ export class RapportVenteComponent implements OnInit {
         for(let i = 0; i < this.venteArticles.length; i++){
            let itemToUpdate = this.venteArticleGroupe.find(item => item.idArticle == this.venteArticles[i].idArticle);
             if (itemToUpdate) {
-                itemToUpdate.quantite = itemToUpdate.quantite!+this.venteArticles[i].quantite!;
+              itemToUpdate.quantite = itemToUpdate.quantite!+this.venteArticles[i].quantite!;
             }else{
+              
               this.venteArticleGroupe.push(this.venteArticles[i]);
             }
           }
         }
+        for(let i = 0; i < this.venteArticleGroupe.length; i++){
+          this.venteArticleGroupe[i].tvaTotal = this.venteArticles[i].tva! * this.venteArticleGroupe[i].quantite!;
+          this.venteArticleGroupe[i].prixTotal = this.venteArticleGroupe[i].prixUnitaire! * this.venteArticleGroupe[i].quantite!;
+        }
+        console.log(this.venteArticles);
     }
 
 
@@ -269,10 +275,10 @@ export class RapportVenteComponent implements OnInit {
         };
         
         //caster dans une autre variable pour pouvoir l'ajouter au document
-        let tableData = venteArticlesNew.map((item: { codeArticle: any; nomArticle: any; quantite: any; prixUnitaire: any })=> [item.codeArticle, item.nomArticle, item.quantite, item.prixUnitaire]);
+        let tableData = venteArticlesNew.map((item: { codeArticle: any; nomArticle: any; quantite: any; prixUnitaire: any; prixTotal:any; tvaTotal: any })=> [item.codeArticle, item.nomArticle, item.quantite, item.prixUnitaire, item.prixTotal, item.tvaTotal]);
         
         // Génération du tableau avec les styles configurés
-        let enteteTab = ['Code', 'Nom', 'Quantite', 'Prix unitaire'+'('+this.entreprise.monnaie+')'];
+        let enteteTab = ['Code', 'Nom', 'Quantite', 'Prix unitaire'+'('+this.entreprise.monnaie+')', 'Montant total'+'('+this.entreprise.monnaie+')', 'TVA totale'+'('+this.entreprise.monnaie+')'];
        
         (doc as any).autoTable({
           head: [enteteTab],

@@ -29,6 +29,7 @@
     "bootstrap": "^5.2.3",
     "faker": "^6.6.6",
     "file-saver": "^2.0.5",
+    "highcharts": "^11.1.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.29",
     "mobiscroll-angular": "^4.0.0",

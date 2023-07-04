@@ -4,9 +4,9 @@
         <h1>{{title}}</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Elements</li>
+          <li class="breadcrumb-item"><a href="">Accueil</a></li>
+          <li class="breadcrumb-item"><a href="articles">Articles</a></li>
+          <li class="breadcrumb-item active">Ajouter</li>
         </ol>
       </nav>
 
@@ -25,12 +25,12 @@
                         <div class="mb-3 col">
                             <label class="form-label">Code</label>
                             <input *ngIf="id"  type="text" value class="form-control" [value]="articleAddOrEdit.code" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" disabled>
-                            <input *ngIf="!id" type="text" value class="form-control" formControlName="code" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" >
+                            <input *ngIf="!id" type="text" maxlength="120" value class="form-control" formControlName="code" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" >
                          </div>
                         
                         <div class="mb-3 col">
                             <label class="form-label">Nom</label>
-                            <input type="text" formControlName="nom" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }" />
+                            <input type="text"  maxlength="120"formControlName="nom" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }" />
                             <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
                                 <div *ngIf="f.nom.errors.required">Le nom est obligatoire</div>
                             </div>
@@ -39,7 +39,7 @@
                     
                         <div class="mb-3 col">
                             <label class="form-label">Code bar</label>
-                            <input *ngIf="id"  type="text" value class="form-control" [value]="articleAddOrEdit.codeBar" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" disabled>
+                            <input *ngIf="id"  maxlength="120" type="text" value class="form-control" [value]="articleAddOrEdit.codeBar" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" disabled>
                              <input *ngIf="!id" type="text" formControlName="codeBar" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.codeBar.errors }" />
                         </div>
                     
@@ -68,13 +68,24 @@
                             </div>
                         </div>
 
+                            <div class="mb-3 col">
+                                <label class="form-label">Tva</label>
+                                <input max="100" min="0" type="number" formControlName="tva" class="form-control"  />
+                               
+                            </div>
+
                        
                     
                     </div>
 
                    
-
                     <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Stockable</label>
+                            <mat-slide-toggle formControlName="achat"></mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div *ngIf="articleAddOrEdit.achat" class="row">
                         <div class="mb-3 col">
                             <label class="form-label">Quantité en stock</label>
                             <input *ngIf="id"  type="text" class="form-control" [value]="articleAddOrEdit.stock" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" disabled>
@@ -96,28 +107,20 @@
 
                     <div class="row">
                         <div class="mb-3 col">
-                            <label class="form-label"> Achat</label>
-                            <mat-slide-toggle formControlName="achat"></mat-slide-toggle>
-                        </div>
-                    
-
-                        <div class="mb-3 col">
                             <label class="form-label"> actif</label>
                             <mat-slide-toggle formControlName="actif"></mat-slide-toggle>
                         </div>
                     </div>
-                    <div *ngIf="articleAddOrEdit.achat" class="row">
+                    <!--<div *ngIf="articleAddOrEdit.achat" class="row">
                         <div class="mb-3 col">
                             <label class="form-label">Prix de revient</label>
                             <input type="number" formControlName="prixAchat" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixAchat.errors }" />
                         </div>
-                    </div>
+                    </div>-->
                     <div class="row"> <div class="mb-3 col">
                         <label class="form-label">description</label>
-                        <textarea rows="4"   formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" ></textarea>
-                        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                            <!--<div *ngIf="f.description.errors.required">Email is required</div>-->
-                        </div>
+                        <textarea rows="4" maxlength="120"  formControlName="description" class="form-control" ></textarea>
+                        
                     </div>
                         <label class="form-label">
                             <div *ngIf="id"> Changer de photo</div>

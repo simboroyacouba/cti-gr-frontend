@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { ChartModule } from 'highcharts';
 import { DropDownButtonModule } from '@syncfusion/ej2-angular-splitbuttons';
 import { enableRipple } from '@syncfusion/ej2-base';
 @NgModule({
@@ -35,6 +35,7 @@ import { enableRipple } from '@syncfusion/ej2-base';
         MatButtonModule,
         MatIconModule,
         FormsModule,
+        ChartModule,
         BrowserModule,
         DropDownButtonModule,
         BrowserAnimationsModule

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html id="tick">
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .ticket {
+      max-width: 300px;
+      margin: 0 auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    .ticket-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .ticket-items {
+      margin-bottom: 10px;
+    }
+
+    .ticket-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .ticket-total {
+      font-weight: bold;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div  class="ticket">
+    <div class="ticket-header">
+      <img width="170" src="{{photoEntreprise}}" alt="" style=" align-self: center;">
+      <h1 style="color: black; max-width: 300px; text-align: center">{{nomEntreprise}}</h1>
+      <p style=" max-width: 300px; text-align: center;">{{adresseEntreprise}}</p>
+      <br>
+      <h2 style=" max-width: 300px; text-align: center;"><b>Rapport de session</b></h2>
+    </div>
+    <div>
+      <div style=" max-width: 300px;">N° : {{session.code}}</div>
+      <div style=" max-width: 300px;">Ouverture : {{session.dateOuverture | date:'dd-MM-yyyy: H:mm'}}</div>
+      <div style=" max-width: 300px;">Fermeture : {{session.datefermeture | date:'dd-MM-yyyy: H:mm'}}</div>
+      <div style=" max-width: 300px;" > Enploye : {{caissier.lastName}} {{caissier.firstName}} ({{caissier.code}})</div>
+    </div>
+<br>
+
+    <br><br>
+
+    <div class="ticket-total" style=" max-width: 300px;">
+      <span>Total: </span>
+      <span style="float: right;"><b>{{montantTotal | number:'1.0-3'}}</b> {{monnaie}}</span>
+    </div>
+
+    <div class="ticket-total" style=" max-width: 300px;">
+      <span>TVA: </span>
+      <span style="float: right;"><b>{{tvaTotal | number:'1.0-3'}}</b> {{monnaie}}</span>
+    </div>
+
+    <div class="ticket-total" style=" max-width: 300px;">
+      <span>remise: </span>
+      <span style="float: right;"><b>{{remiseTotal| number:'1.0-3'}}</b> {{monnaie}}</span>
+    </div>
+
+    <div class="ticket-total" style=" max-width: 300px;">
+      <span>Montant total encaissé: </span>
+      <span style="float: right;"><b>{{montantAPayerTotal| number:'1.0-3'}}</b> {{monnaie}}</span>
+    </div>
+
+    
+  </div>
+</body>

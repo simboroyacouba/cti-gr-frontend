@@ -16,6 +16,8 @@ const articlesModule = () => import('./articles/articles.module').then(x => x.Ar
 const posModule = () => import('./pos/pos.module').then(x => x.PosModule);
 const venteModule = () => import('./vente/vente.module').then(x => x.VenteModule);
 
+const entrepriseModule = () => import('./entreprise/entreprise.module').then(x => x.EntrepriseModule);
+
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -26,6 +28,8 @@ const routes: Routes = [
     { path: 'articles',  loadChildren: articlesModule, canActivate: [AuthGuard] },
     { path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
     { path: 'pos', loadChildren: posModule, canActivate: [AuthGuard] },
+    
+    { path: 'entreprise', loadChildren: entrepriseModule, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: accountModule },
 
     // otherwise redirect to home

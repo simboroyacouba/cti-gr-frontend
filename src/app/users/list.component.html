@@ -1,6 +1,10 @@
 ﻿<h1>Users</h1>
 <a routerLink="add" class="btn btn-sm btn-success mb-2">Ajouter un utilisateur</a>
-
+<div style="align-content: center;">
+    <form  [formGroup]="searchForm" (ngSubmit)="recherche()">
+        <input type="text" placeholder ="Recherche" formControlName="textRecherche">
+    </form>
+</div>
 
 <div>
   <table class="table table-striped">
@@ -12,7 +16,7 @@
             <th style="width: 15%">Nom d'utilisateur</th>
             <th style="width: 15%">Role</th>
             <th style="width: 15%">Email</th>
-            <th style="width: 10%"></th>
+            <th style="width: 10%">Actif</th>
         </tr>
     </thead>
     <tbody>
@@ -21,34 +25,24 @@
             <td style="width: 15%">{{user.firstName}}</td>
             <td style="width: 15%">{{user.lastName}}</td>
             <td style="width: 15%">{{user.username}}</td>
-            <td  *ngFor="let role of user.roles" style="width: 15%">
+            <td  >
+                <div *ngFor="let role of user.roles" style="max-width: 20%">
                 <span *ngIf=" role.name =='ROLE_USER'">employe </span> 
                 <span *ngIf=" role.name =='ROLE_ADMIN'">Administrateur </span>
                 <span *ngIf=" role.name =='ROLE_MODERATOR'">Manager </span> 
                 <span *ngIf=" role.name =='ROLE_CAISSIER'">Caissier</span> 
+                </div>
+               
             </td>
             <td style="width: 15%">{{user.email}}</td>
+            <td style="width: 15%">
+                <mat-slide-toggle [(ngModel)]="user.actif" *ngIf="!desactivating" (change)=" activateDesactivateUser(user.id!)" ></mat-slide-toggle>
+                <div *ngIf="desactivating" class="text-center m-5">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </div>
+            </td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
-                <button *ngIf="user.actif == false" style="background-color: darkgreen;" (click)="activateDesactivateUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">
-                
-                        <span >
-                            Activer
-                        </span>
-                    </span>
-                </button>
-
-                <button *ngIf="user.actif == true"  (click)="activateDesactivateUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">
-                        <span  >
-                            Désactiver
-                        </span> 
-                       
-                    </span>
-                </button>
             </td>
         </tr>
         <tr *ngIf="!users">

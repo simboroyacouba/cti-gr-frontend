@@ -37,16 +37,16 @@ export class ClientService {
     }
 
     getAll(): Observable<any>{
-        return this.http.get<Invoice[]>(`${environment.apiUrl}/api/customer/get`);
+        return this.http.get<Client[]>(`${environment.apiUrl}/api/customer/get`);
     }
 
     getById(id: BigInt): Observable<any>{
-        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/customer/getone`, {id});
+        return this.http.post<Client>(`${environment.apiUrl}/api/customer/getone`, {id});
     }
 
     update(client: Client): Observable<any>{
         let id = undefined;
-        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/customer/update`, client);
+        return this.http.post<Client[]>(`${environment.apiUrl}/api/customer/update`, client);
     }
 
     insertArticle(article: Article) {
@@ -54,14 +54,14 @@ export class ClientService {
     }
     
     getBirthdayToday(): Observable<any>{//client dont l'anniversaire est aujourd'hui
-        return this.http.get<Invoice[]>(`${environment.apiUrl}/api/customer/getbirthdaytoday`);
+        return this.http.get<Client[]>(`${environment.apiUrl}/api/customer/getbirthdaytoday`);
     }
 
-    getBirthday01(): Observable<any>{//client dont l'anniversaire ent di 01 au 15 du mois
-        return this.http.get<Invoice[]>(`${environment.apiUrl}/api/customer/getbirthday01`);
+    getBirthday01(): Observable<any>{//client dont l'anniversaire ent du 01 au 15 du mois
+        return this.http.get<Client[]>(`${environment.apiUrl}/api/customer/getbirthday01`);
     }
 
-    getBirthday02(): Observable<any>{//client dont l'anniversaire ent di 15 a la fin du mois
-        return this.http.get<Invoice[]>(`${environment.apiUrl}/api/customer/getbirthday02`);
+    getBirthday02(): Observable<any>{//client dont l'anniversaire ent du 15 a la fin du mois
+        return this.http.get<Client[]>(`${environment.apiUrl}/api/customer/getbirthday02`);
     }
 }

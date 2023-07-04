@@ -3,10 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { MatTableModule} from '@angular/material/table';
-import { ArticlesRoutingModule } from './client-routing.module';
-import { LayoutComponent } from './layout.component';
-import { ListClientComponent } from './list-client.component';
-import { AddEditClientComponent } from './add-edit-client.component';
+import { RapportVenteRoutingModule } from '../rapportVente/rapportVente-routing.module';
+import { LayoutComponent } from '../entreprise/layout.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -14,15 +12,17 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms'; 
+import { RouterModule } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { ListAnniversaireClientComponent } from './list-anniversaireclient.component';
-import { InvoicesClientComponent } from './invoices-client.component';
+import { EntrepriseComponent } from './entrepriseComponent';
+import { EntrepriseRoutingModule } from './entreprise-routing.module';
 
 @NgModule({
     imports: [
+        RouterModule,
         CommonModule,
         ReactiveFormsModule,
-        ArticlesRoutingModule,
+        EntrepriseRoutingModule,
         MatTableModule,
         MatToolbarModule, 
         MatButtonModule, 
@@ -37,10 +37,7 @@ import { InvoicesClientComponent } from './invoices-client.component';
     ],
     declarations: [
         LayoutComponent,
-        ListClientComponent,
-        AddEditClientComponent,
-        ListAnniversaireClientComponent,
-        InvoicesClientComponent
+        EntrepriseComponent,
     ]
 })
-export class ClientModule { }
+export class EntrepriseModule { }

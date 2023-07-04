@@ -1,0 +1,89 @@
+﻿<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h2>liste des achats de :</h2>
+        <h1> {{clientAddOrEdit.nom}}  {{clientAddOrEdit.prenom}}  ({{clientAddOrEdit.code}})</h1>
+    
+
+      
+<br>
+
+<form  [formGroup]="formInvoices" (ngSubmit)="getInvoices()">
+    
+        <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Date inferieure</label>
+                    <div class="col-sm-10">
+                        <input type="date" formControlName="dateInferieure" class="form-control"  />
+                    </div>
+            </div>
+            
+            <div class="mb-3 col">
+                <label class="form-label">Date superieure</label>
+                <div class="col-sm-10">
+                    <input type="date" formControlName="dateSuperieure" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" >
+            Valider
+        </button>
+       
+    </form> 
+<section *ngIf="id"  class="section">
+    <div style="width: auto;">
+
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"><b>Liste des Achats</b></h3>
+          <div class="row">
+            <div class="mb-3 col">
+               
+            </div>
+            
+            <div class="mb-3 col">
+                Montant total payé : <b>{{montantTotalPaye}} {{entreprise.monnaie}}</b>
+            </div>
+            
+            <div class="mb-3 col">
+                Montant total de remise : <b>{{montantTotalremise}} {{entreprise.monnaie}}</b>
+            </div>
+        </div>
+          <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">code facture</th>
+                    <th style="width: 20%">Montant total</th>
+                    <th style="width: 20%">Remise</th>
+                    <th style="width: 20%">Montant payé</th>
+                    <th style="width: 10%">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let InvoiceOfCustomer of listInvoiceOfCustomer">
+                    <td style="width: 20%">{{InvoiceOfCustomer.code}}</td>
+                    <td style="width: 20%">{{InvoiceOfCustomer.montantTotal}}</td>
+                    <td style="width: 20%">{{InvoiceOfCustomer.remise}}</td>
+                    <td style="width: 20%">{{InvoiceOfCustomer.montantAPayer}}</td>
+                    <td style="width: 25%">{{InvoiceOfCustomer.date | date:'dd-MM-yyyy: hh:mm'}}</td>
+                    <td><button class="btn btn-success" (click)="invoiceInfo(InvoiceOfCustomer.id!)">Détails</button></td>
+                
+                    
+                </tr>
+                <tr *ngIf="!listInvoiceOfCustomer">
+                    <td colspan="4" class="text-center">
+                        <span class="spinner-border spinner-border-lg align-center"></span>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        <br><br>
+            
+        </div>
+    </div>
+</div>
+</section>
+
+    </div><!-- End Page Title -->
+
+    

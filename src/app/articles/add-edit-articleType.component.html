@@ -4,9 +4,9 @@
         <h1>{{title}}</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Homezftrhesdvqe</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Elements</li>
+          <li class="breadcrumb-item"><a href="">Accueil</a></li>
+          <li class="breadcrumb-item"> <a href="/articles/articleType">Catégories d'artcles</a></li>
+          <li class="breadcrumb-item active">Ajouter</li>
         </ol>
       </nav>
 
@@ -20,10 +20,10 @@
                 <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
                    
                     <div class="row" >
-                        <div class="mb-3 col">
+                        <div *ngIf="id" class="mb-3 col">
                             <label class="form-label">Code</label>
-                            <input  type="text"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" [disabled]="!!id">
-                         </div>
+                            <input type="text" value class="form-control" [value]="articleTypeAddOrEdit.code" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" disabled>
+                            </div>
                         
                         <div class="mb-3 col">
                             <label class="form-label">Nom</label>
@@ -49,21 +49,8 @@
                             <!--<div *ngIf="f.description.errors.required">Email is required</div>-->
                         </div>
                     </div>
-                        <label class="form-label">
-                            <div *ngIf="id"> Changer de photo</div>
-                            <div *ngIf="!id"> Charger une photo photo</div>
-                        </label>
-                     
-                        
-                        
-                      
-                        
-                        
-                        
-                        
-                        <button (click)="test()">
-                            test
-                        </button> 
+                       
+                       
                     </div>
                     <br>
                     <div class="mb-3">

@@ -89,7 +89,30 @@
     </div>
 </section>
 <br>
+
 <section *ngIf="id"  class="section">
+<form  [formGroup]="formInvoices" (ngSubmit)="getInvoices()">
+    
+        <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Date inferieure</label>
+                    <div class="col-sm-10">
+                        <input type="date" formControlName="dateInferieure" class="form-control"  />
+                    </div>
+            </div>
+            
+            <div class="mb-3 col">
+                <label class="form-label">Date superieure</label>
+                <div class="col-sm-10">
+                    <input type="date" formControlName="dateSuperieure" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" >
+            Valider
+        </button>
+       
+    </form> 
     <div style="width: auto;">
 
       <div class="card">
@@ -97,18 +120,15 @@
           <h3 class="card-title"><b>Liste des Achats</b></h3>
           <div class="row">
             <div class="mb-3 col">
-                <button class="btn btn-sm btn-danger btn-delete-user">
-                    Imprimer
-                    <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
-                </button>
+               
             </div>
             
             <div class="mb-3 col">
-                Montant total payé : <b>{{montantTotalPaye}} <!--</a>{{entreprise.monnaie}}--></b>
+                Montant total payé : <b>{{montantTotalPaye}} {{entreprise.monnaie}}</b>
             </div>
             
             <div class="mb-3 col">
-                Montant total de remise : <b>{{montantTotalremise}} <!--</a>{{entreprise.monnaie}}--></b>
+                Montant total de remise : <b>{{montantTotalremise}} {{entreprise.monnaie}}</b>
             </div>
         </div>
           <table class="table table-striped">

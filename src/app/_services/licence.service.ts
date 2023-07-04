@@ -7,6 +7,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
 import { Licence } from '@app/_models/Licence';
+import { Data } from '@app/_models/data';
 
 @Injectable({ providedIn: 'root' })
 export class LicenceService {
@@ -27,7 +28,6 @@ export class LicenceService {
     }
 
     get() {
-
         return this.http.get<Licence>(`${environment.apiUrl}/api/licence/getActiveLicence` );
     }
 
@@ -35,4 +35,9 @@ export class LicenceService {
         return this.http.post(`${environment.apiUrl}/api/licence/insert`, licence);
     }
 
+
+    // recupperer les donnees d'installation 
+    getData() {
+        return this.http.get<Data>(`${environment.apiUrl}/api/data/get` );
+    }
 }

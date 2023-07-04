@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogInfo } from '@app/_components/dialogInfo/DialogInfo';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -16,7 +18,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        public dialog: MatDialog,
     ) { }
 
     ngOnInit() {
@@ -52,8 +55,15 @@ export class LoginComponent implements OnInit {
                 },
                 error: error => {
                     this.alertService.error(error);
+                    this.problem(error);
                     this.loading = false;
                 }
             });
     }
+
+    problem(message: string){
+        const dialogRef = this.dialog.open(DialogInfo, {
+          data: {name: message},
+      });
+      }
 }

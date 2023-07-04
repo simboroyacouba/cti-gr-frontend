@@ -40,7 +40,7 @@ export class AccountService {
         return this.entrepriseSubject.value;
     }
 
-        //
+        //********************************debut Api pour entreprise********************************************************************
         getEntreprise() {
             console.log("############");
             return this.http.get<Entreprise>(`${environment.apiUrl}/api/entreprise/get`)                 
@@ -53,15 +53,14 @@ export class AccountService {
         uploadProfilePhotoentreprise(file: File): Observable<HttpEvent<any>> {
             const formData: FormData = new FormData();
             formData.append('file', file);
-        
-            const req = new HttpRequest('POST', `${environment.apiUrl}/api/auth/uploadimage`, formData, {
+            const req = new HttpRequest('POST', `${environment.apiUrl}/api/entreprise/uploadimage`, formData, {
               reportProgress: true,
               responseType: 'json',
               
             });
             return this.http.request(req);
           }    
-        //
+       //********************************fin Api pour entreprise********************************************************************
 
 
 

@@ -23,7 +23,8 @@ export class AddEditArticleTypeComponent implements OnInit {
     loading = false;
     submitting = false;
     submitted = false;
-    articleTypeAddOrEdit = new Article;
+    nomArticleTypeAddOrEdit!:string;
+    articleTypeAddOrEdit = new ArticleType;
     userConnected!: User | null;
     dropdownSettings:IDropdownSettings={};
 
@@ -70,20 +71,17 @@ export class AddEditArticleTypeComponent implements OnInit {
 
           this.title = "Modifier le type article";
           this.loading = true;
-          this.articleService.getById(this.id)
-              .subscribe((x) => {
+          this.articleService.getOneTypeArticleById(this.id)
+              .subscribe((x:ArticleType) => {
+                this.nomArticleTypeAddOrEdit = x.nom!;
+                  this.articleTypeAddOrEdit = x;
                   this.form.patchValue(x);
-                  console.log(x);
-                 // this.articleTypeAddOrEdit.achat = x.achat;
                   this.loading = false;
                 });
         }  
     }
  
-test(){
-  console.log('***********************');
-  console.log(this.articleTypeAddOrEdit);
-}
+
       
       public itemsToString(value:Array<any> = []):string {
         return value
@@ -94,12 +92,10 @@ test(){
 
     onChanges(): void {
         this.form.valueChanges.subscribe(val => {
-            this.articleTypeAddOrEdit = new ArticleType(this.id,//id
-                                    undefined,//code
-                                      this.form.get('nom')?.value,//nom 
-                                       this.form.get('description')?.value,//description
-                                         this.form.get('actif')?.value,//actif
-                                         ) ;
+                                    this.articleTypeAddOrEdit.nom =  this.form.get('nom')?.value;//nom 
+                                    this.articleTypeAddOrEdit.description = this.form.get('description')?.value;//description
+                                    this.articleTypeAddOrEdit.actif =  this.form.get('actif')?.value;//actif
+                                        
 
           });
     }
@@ -134,6 +130,7 @@ test(){
     }
 
     private updateArticleType(){
+                console.log(this.articleTypeAddOrEdit);
         this.articleService.updateTypeArticle(this.articleTypeAddOrEdit)
         .subscribe({
             next: (x) => {
@@ -161,7 +158,6 @@ test(){
 
     private saveArticle() {
         // create or update user based on id param
-        console.log(this.articleTypeAddOrEdit);
         return this.id
             ? this.updateArticleType()
             : this.createArticleType();

@@ -15,23 +15,20 @@ import { Article } from '@app/_models/Article';
 import { ArticleType } from '@app/_models/ArticleType';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInfo } from '@app/_components/dialogInfo/DialogInfo';
+import { Entreprise } from '@app/_models/Entreprise';
 
-@Component({ templateUrl: 'add-edit-article.component.html' ,
-              styleUrls: ['list-article.component.scss'],})
-export class AddEditArticleComponent implements OnInit {
+@Component({ templateUrl: 'entrepriseComponent.html' ,
+              styleUrls: ['entreprise.component.scss'],})
+export class EntrepriseComponent implements OnInit {
     form!: FormGroup;
     id?: BigInt;
-    title!: string;
     loading = false;
     submitting = false;
     submitted = false;
-    articleAddOrEdit = new Article;
+    entreprise = new Entreprise;
     changerPhoto = false;
     userConnected!: User | null;
-    dropdownSettings:IDropdownSettings={};
     nomImage!: string;
-
-    articleTypes!: ArticleType[];
 
     photo!:string;
 
@@ -65,55 +62,42 @@ export class AddEditArticleComponent implements OnInit {
         .subscribe((x) => {
             this.userConnected = x;
         });
-        this.articleService.getAllTypeArticle()
+        this.accountService.getEntreprise()
         .subscribe((x) => {
-          this.articleTypes = [];
-          for(let articleTypeTemp of x){
-            if(articleTypeTemp.actif == true){
-              this.articleTypes.push(articleTypeTemp);
-            }
-          }
+            this.entreprise = x;
         });
         
-          //dans le cas ou il s'agit de modifier un user on recupere l'id a partir de l'url
-        this.id = this.route.snapshot.params['id'];
-        if(this.id !=null){
-          this.articleAddOrEdit.id = this.id;
-        }
         // form with validation rules
         this.form = this.formBuilder.group({
-          code: ['',],
             nom: ['', Validators.required],
-            description: ['',],
-            codeBar: ['', ],
-            prixVente: [, Validators.required],
-            tva: [,],
-            prixAchat: [, ],
-            idTypeArticle: [, Validators.required],
-            stock: [, Validators.required],
-            stockMin: [, Validators.required],
-            achat: [, Validators.required],
-            actif: [, Validators.required],
+            sigle: [, Validators.required],
+            pays: ['', ],
+            ville: [,Validators.required],
+            texte1: ['', Validators.required],//contact
+            texte2: ['', ],//capital
+            texte3: ['', ],//email
+            texte4: ['', Validators.required],//texteRemerciement
+            rccm: ['', ],
+            ifu: ['', ],
+            monnaie: ['', ],
+            description: [,],
+            formeJuridique: ['',],
 
         });
         this.onChanges();
        
-        this.title = 'Ajouter un  article';
-        if (this.id) {
+        
           // edit mode
 
-          this.title = "Modifier l'article";
           this.loading = true;
-          this.articleService.getById(this.id)
+          this.accountService.getEntreprise()
               .subscribe((x) => {
                   this.form.patchValue(x);
-                  this.articleAddOrEdit.code = x.code;
-                  this.articleAddOrEdit.achat = x.achat;
-                  this.photo = `${environment.apiUrl}/api/auth/download?chemin=`+x.photo?.replace(/\\/g, '/');
+                  this.photo = `${environment.apiUrl}/api/auth/download?chemin=`+x.image?.replace(/\\/g, '/');
                   this.loading = false;
                 });
                 
-        }  
+        
     }
     functionPhoto(){
       if(this.changerPhoto == false){
@@ -155,9 +139,7 @@ export class AddEditArticleComponent implements OnInit {
           data: {name: message},
       });
       }
-test(){
-}
-      uploadImage(prefixCode:string): void {
+      uploadImage(): void {
         this.progress = 0;
     
     
@@ -165,10 +147,10 @@ test(){
           let file: File | null = this.selectedFiles.item(0);
           
           const fileExtension = file?.name.split('.').pop();
-          file = new File([file as File], prefixCode+"."+fileExtension, { type: file?.type });
+          file = new File([file as File], "entre"+"."+fileExtension, { type: file?.type });
           if (file) {
             this.currentFile = file;
-            this.accountService.uploadProfilePhoto(this.currentFile,).subscribe({
+            this.accountService.uploadProfilePhotoentreprise(this.currentFile,).subscribe({
               next: (event: any) => {
                 if (event.type === HttpEventType.UploadProgress) {
                   this.progress = Math.round((100 * event.loaded) / event.total);
@@ -205,26 +187,22 @@ test(){
 
     onChanges(): void {
         this.form.valueChanges.subscribe(val => {
+          this.entreprise.nom = this.form.get('nom')?.value;//nom
+          this.entreprise.sigle = this.form.get('sigle')?.value;//Sigle
 
-          this.articleAddOrEdit.actif = true;//actif
-          this.articleAddOrEdit.achat = false;
 
-
-          this.articleAddOrEdit.id = this.id,//id
-          this.articleAddOrEdit.dateEnregistrement = undefined;//date enregistrement
-          this.articleAddOrEdit.code = undefined;//code
-          this.articleAddOrEdit.codeBar = this.form.get('codeBar')?.value;//codebar
-          this.articleAddOrEdit.nom = this.form.get('nom')?.value;//nom 
-          this.articleAddOrEdit.description = this.form.get('description')?.value;//description
-          this.articleAddOrEdit.prixVente = this.form.get('prixVente')?.value;//prix vente
-          this.articleAddOrEdit.tva = this.form.get('tva')?.value;//tva
-          this.articleAddOrEdit.prixAchat = this.form.get('prixAchat')?.value;//prix achat
-          this.articleAddOrEdit.idTypeArticle = this.form.get('idTypeArticle')?.value;//id type article
-          this.articleAddOrEdit.actif = this.form.get('actif')?.value;//actif
-          this.articleAddOrEdit.achat = this.form.get('achat')?.value;//achat
-          this.articleAddOrEdit.photo = this.form.get('photo')?.value;//photo
-          this.articleAddOrEdit.stock = this.form.get('stock')?.value;//stock
-          this.articleAddOrEdit.stockMin = this.form.get('stockMin')?.value;
+          this.entreprise.pays = this.form.get('pays')?.value;//pays
+          this.entreprise.ville = this.form.get('ville')?.value;//ville
+          this.entreprise.texte1 = this.form.get('texte1')?.value;//contact
+          this.entreprise.texte2 = this.form.get('texte2')?.value;//capital
+          this.entreprise.texte2 = this.form.get('texte3')?.value;//email
+          this.entreprise.texte4 = this.form.get('texte4')?.value;//texteRemerciement
+          this.entreprise.rccm = this.form.get('rccm')?.value;//rccm
+          this.entreprise.ifu = this.form.get('ifu')?.value;//ifu
+          this.entreprise.monnaie = this.form.get('monnaie')?.value;//monnaie
+          this.entreprise.description = this.form.get('description')?.value;//description (nombre de ticket de caisse)
+          
+          this.entreprise.formeJuridique = this.form.get('formeJuridique')?.value;//formeJuridique
           });
   
         }
@@ -244,56 +222,22 @@ test(){
         }
 
         this.submitting = true;
-        this.saveArticle()
-            /*.subscribe({
-                next: (x) => {
-                    this.uploadImage('EMP'+x);
-                    this.alertService.success('User saved', { keepAfterRouteChange: true });
-                    this.router.navigateByUrl('/users');
-                },
-                error: error => {
-                    
-                }
-            })*/
-                    this.submitting = false;
+        this.updateEntreprise();
+        this.submitting = false;
     }
 
-    private updateArticle(){
-        this.articleService.update(this.articleAddOrEdit)
+    private updateEntreprise(){
+        this.accountService.updateentreprise(this.entreprise)
         .subscribe({
             next: (x) => {
-            this.uploadImage('PRO'+x.message);
+            this.uploadImage();
             this.alertService.success('Article enregistré', { keepAfterRouteChange: true });
-            this.router.navigateByUrl('/articles');
+            this.router.navigateByUrl('/');
         },
         error: error => {
             this.alertService.error(error);
             this.problem(error);
         }
     });
-    }
-    
-    private createArticle(){
-        this.articleService.register(this.articleAddOrEdit)
-        .subscribe({
-            next :(x) => {
-            this.uploadImage('PRO'+x.message);
-            this.alertService.success('Article enregistré', { keepAfterRouteChange: true });
-            this.router.navigateByUrl('/articles');
-
-        }, 
-            error: error => {
-              this.problem(error);
-                this.alertService.error(error);
-            }
-        });
-    }
-
-    private saveArticle() {
-        // create or update user based on id param
-        return this.id
-            ? this.updateArticle()
-            : this.createArticle();
-            
     }
 }

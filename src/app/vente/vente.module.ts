@@ -17,7 +17,6 @@ import { MatPaginatorModule} from '@angular/material/paginator';
 import { MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms'; 
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -39,7 +38,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
         MatGridListModule,
         MatCardModule,
         MatDialogModule,
-        NgSelectModule,
     ],
     declarations: [
         LayoutComponent,

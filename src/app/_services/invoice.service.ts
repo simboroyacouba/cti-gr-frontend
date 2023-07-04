@@ -25,7 +25,7 @@ export class InvoiceService {
        
     }
 
-    //liste api pour les articles
+    //liste api pour les factures
 
     insert(invoice: Invoice) {
         return this.http.post<Message>(`${environment.apiUrl}/api/invoice/insert`, invoice);
@@ -49,6 +49,10 @@ export class InvoiceService {
 
     getByEmploye(id: BigInt, dateinf: Date, datesup: Date): Observable<any>{
         return this.http.post<Invoice[]>(`${environment.apiUrl}/api/invoice/getbyemployeid`, {id, dateinf, datesup});
+    }
+
+    getBySession(id: BigInt): Observable<any>{
+        return this.http.post<Invoice[]>(`${environment.apiUrl}/api/invoice/getbysessionid`, {id});
     }
 
     getbetweenDate(dateinf: Date, datesup: Date): Observable<any>{

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { MatTableModule} from '@angular/material/table';
@@ -13,6 +13,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { ProfilComponent } from './profil.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -22,8 +24,10 @@ import { ProfilComponent } from './profil.component';
         MatTableModule,
         MatToolbarModule, 
         MatButtonModule, 
-        MatIconModule,
+        MatIconModule, FormsModule,
+        MatDialogModule,
         MatPaginatorModule,
+        MatSlideToggleModule,
         NgMultiSelectDropDownModule.forRoot()
     ],
     declarations: [

@@ -66,6 +66,12 @@ export class ArticleService {
         return this.http.post<Message>(`${environment.apiUrl}/api/articletype/insert`, articleType);
     }
 
+    getOneTypeArticleById(idArt:BigInt) {
+        let articleType = new ArticleType;
+        articleType.id = idArt;
+        return this.http.post<ArticleType>(`${environment.apiUrl}/api/articletype/getone`, articleType);
+    }
+
     updateTypeArticle(articleType: ArticleType) {
         return this.http.post<Message>(`${environment.apiUrl}/api/articletype/update`,articleType);
     }

@@ -55,6 +55,7 @@ export class RapportFacturationComponent implements OnInit {
     rechercherPar = 'caisse';
     totalMontant: number = 0;
     totalRemise: number = 0;
+    totalTva: number = 0;
     totalMontantAPayer: number = 0;
     constructor(
         private invoiceService: InvoiceService,
@@ -202,6 +203,7 @@ export class RapportFacturationComponent implements OnInit {
         this.totalMontant = this.totalMontant + this.invoices[i].montantTotal!;
         this.totalMontantAPayer = this.totalMontantAPayer + this.invoices[i].montantAPayer!;
         this.totalRemise = this.totalRemise + this.invoices[i].remise!;
+        this.totalTva = this.totalTva + this.invoices[i].tva!;
       }
     }
     onChanges(): void {
@@ -385,10 +387,10 @@ export class RapportFacturationComponent implements OnInit {
         };
         
         //caster dans une autre variable pour pouvoir l'ajouter au document
-        let tableData = invoicesNew.map((item: { code: any; montantTotal: any; remise: any; montantAPayer: any; date: any })=> [item.code, item.montantTotal, item.remise, item.montantAPayer, datePipe.transform(item.date, 'dd/MM/yyyy: hh:mm')]);
+        let tableData = invoicesNew.map((item: { code: any; montantTotal: any; remise: any; tva:any; montantAPayer: any; date: any })=> [item.code, item.montantTotal, item.remise, item.tva, item.montantAPayer, datePipe.transform(item.date, 'dd/MM/yyyy: hh:mm')]);
         
         // Génération du tableau avec les styles configurés
-        let enteteTab = ['Code', 'Montant total', 'Remise', 'Montant à payer'+'('+this.entreprise.monnaie+')', 'Date'];
+        let enteteTab = ['Code', 'Montant total'+'('+this.entreprise.monnaie+')', 'Remise'+'('+this.entreprise.monnaie+')', 'TVA'+'('+this.entreprise.monnaie+')', 'Montant à payer'+'('+this.entreprise.monnaie+')', 'Date'];
        
         (doc as any).autoTable({
           head: [enteteTab],
@@ -404,8 +406,9 @@ export class RapportFacturationComponent implements OnInit {
          doc.setFontSize(9);
          doc.setFont('helvetica');
          
-         doc.text('Total des montants : '+this.totalMontant+' '+this.entreprise.monnaie,  30, pageHeight - 40 );
-         doc.text('Total des remises : '+this.totalMontant+' '+this.entreprise.monnaie,  30, pageHeight - 35);
+         doc.text('Total des montants : '+this.totalMontant+' '+this.entreprise.monnaie,  30, pageHeight - 45 );
+         doc.text('Total des remises : '+this.totalMontant+' '+this.entreprise.monnaie,  30, pageHeight - 40);
+         doc.text('Total des TVA : '+this.totalTva+' '+this.entreprise.monnaie,  30, pageHeight - 35);
          doc.text('Total des montants payés : '+this.totalMontant+' '+this.entreprise.monnaie,  30, pageHeight - 30);
 
         

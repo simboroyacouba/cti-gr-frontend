@@ -20,9 +20,9 @@ import { dialogView } from '@app/_components/dialogView/dialogView';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { Entreprise } from '@app/_models/Entreprise';
 
-@Component({ templateUrl: 'add-edit-client.component.html' ,
+@Component({ templateUrl: 'invoices-client.component.html' ,
               styleUrls: ['list-client.component.scss'],})
-export class AddEditClientComponent implements OnInit {
+export class InvoicesClientComponent implements OnInit {
     
     //variables poue afficher la liste des facturations du client
     venteArticles!: VenteArticle[];//contient la liste des articles vendus 
@@ -68,7 +68,6 @@ export class AddEditClientComponent implements OnInit {
             this.userConnected = x;
         });
 
-        console.log(this.id);
         this.accountService.getEntreprise()
         .subscribe((x) => {
             this.entreprise = x;
@@ -128,6 +127,7 @@ export class AddEditClientComponent implements OnInit {
       this.dateSup =  this.formInvoices.get('dateSuperieure')?.value;
     });
 
+    console.log(this.dateInf, this.dateSup);
     if(this.id != undefined){
       if(this.dateInf == undefined && this.dateSup == undefined){
         this.invoiceService.getByClient(this.id!, new Date(2023, 3, 4), new Date)

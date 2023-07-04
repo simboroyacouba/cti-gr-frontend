@@ -1,23 +1,46 @@
-﻿<div *ngIf="userConnected!.idBox != undefined" >
+﻿<!--si l'user connecte es affecte a un pos afficher ouvrir session ou reprendre session-->
+<div *ngIf="userConnected!.idBox != undefined" >
+
+    <!--si il n'y a pas de session en cours afficher bouton creer session-->
     <div  *ngIf="actualSession === undefined ">
         <button class="btn btn-primary" (click)="createSession()">Ouvrir une session</button>
+        <br><br>
+        <!--afficher les dernières sessions fermées-->
+        <div  *ngIf="sessionsClosed !== undefined ">
+            <div *ngFor="let sessionClosed of sessionsClosed">
+                <button class="btn btn-primary" (click)="onPrintRapport(sessionClosed.id!)">
+                    Code: <b>{{sessionClosed.code}}</b> <br> 
+                    Ouverte le : <b>{{sessionClosed.dateOuverture | date:'dd-MM-yyyy: H:mm'}}</b> <br> 
+                    fermé le : <b>{{sessionClosed.datefermeture | date:'dd-MM-yyyy: H:mm'}}</b> 
+                </button><br><br>
+            </div>
+            
+        </div>
     </div>
 
+ <!--si il y a une session en cours afficher bouton reprendre session-->
     <div  *ngIf="actualSession !== undefined && !ouvrirSession">
-        <button class="btn btn-warning" (click)="openActiveSession()">Ouvrir la session active (Ouverte le : {{actualSession.dateOuverture | date:'dd-MM-yyyy: hh:mm'}})</button>
+        <button class="btn btn-warning" (click)="openActiveSession()">Ouvrir la session active (Ouverte le : {{actualSession.dateOuverture | date:'dd-MM-yyyy: H:mm'}})</button>
     </div>
 
 
-
+ <!--si il y a une sessio en cours afficher le point de vente-->
     <div *ngIf="actualSession !== undefined && ouvrirSession">
-       <div>
-        <form action="">
-            <input type="text">
+<!--faire recherche-->
+        <div *ngIf="invoiceActual" style="position: fixed; top: 20px;">
+            <form *ngIf="!loading" [formGroup]="searchForm" (ngSubmit)="recherche()">
+                <input type="text"  placeholder="Recherche" formControlName="textRecherche">
+            </form>
+        </div>
+        <!--scanner code bar-->
+       <div *ngIf="invoiceActual" style="position: fixed; top: 50px;">
+        <form [formGroup]="formCodeBar" (ngSubmit)="validerCodeBar()">
+            <input type="text" placeholder="Code bar" formControlName="codeBar">
         </form>
        </div>
         <div style="position: fixed; top: 100px; bottom: 250px; width:60%; background-color: rgb(236, 235, 235);">
             <div class="card-list" style="height: 180%; overflow-y: auto; " >
-                <mat-card *ngFor="let article of articles" style="width: 200px; height: 200px;" (click)="ajouterArticle(article.id!, article.nom!,article.prixVente!)">
+                <mat-card *ngFor="let article of articles" style="width: 200px; height: 200px;" (click)="ajouterArticle(article.id!, article.nom!,article.prixVente!, article.tva!)">
                 <mat-card-header>
                     <mat-card-title>{{ article.nom }}</mat-card-title>
                     <mat-card-subtitle>{{ article.prixVente }} {{entreprise.monnaie}}</mat-card-subtitle>
@@ -42,27 +65,26 @@
                 
             </main>
             <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+            <div id="sectionToPrint">
+                <h2>Session: {{actualSession.code}}</h2>
         <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="validerVente()">
-           
             <main *ngIf="invoiceActual">
-                <div class="cart">
-                <div><b style="font-size: 30px;">Facture</b> </div><br>
-                    <label class="form-label">Client</label>
+                <div class="cart" style="height: 600px; overflow-y: auto;">
+                <div><b style="font-size: 30px;">Facture</b> : {{invoiceActual.code}}</div><br>
                     <div class="col-sm-10">
-                        <select class="form-select" aria-label="Default select example" select [name]="" id="" formControlName="idClient">
-                            <option [value]="1">Aucun</option>
-                            <option *ngFor="let client of clients" [value]="client.id">{{client.nom }} {{client.prenom }} ({{client.code}})</option>
-                        </select>
                         
                     </div>
                     <div>
-                        <ng-select [items]="clients"
-                                bindLabel="name"
-                                placeholder="Select city"
-                                [(ngModel)]="idClient">
-                        </ng-select>
+                        <ng-multiselect-dropdown
+                        [placeholder]="'Client'"
+                        [settings]="dropdownSettings"
+                        [data]="clients"
+                        [(ngModel)]="id"
+                        formControlName="idClient"
+                      >
+                      </ng-multiselect-dropdown>
                     </div>
-                        <div style="height: 60%; overflow-y: auto;">
+                        <div style="max-height: 40%; overflow-y: auto;">
                             <table > 
                                 <tr>
                                     <td style="width: 30%;"> <b>Nom</b> </td>
@@ -77,8 +99,8 @@
                                             <a *ngIf="artAVendre.quantite!<10">0</a>{{ artAVendre.quantite}}
                                             <mat-icon color="blue" (click)="augmenterQteArticle(artAVendre.idArticle!)">add_circle_outline</mat-icon>
                                         </td>
-                                        <td>{{ artAVendre.prixUnitaire}}</td>
-                                        <td>{{ artAVendre.montant}}</td> 
+                                        <td>{{ artAVendre.prixUnitaire | number:'1.0-3'}}</td>
+                                        <td>{{ artAVendre.montant | number:'1.0-3'}}</td> 
                                         <td>  <mat-icon color="blue" (click)="supprimerArticle(artAVendre.idArticle!)">clear</mat-icon></td>
                                 </tr>
                             </table>
@@ -86,7 +108,8 @@
                     </div>
             </main>
             <div *ngIf="invoiceActual" >
-                <div class ="row" style="position: fixed;  right: 0; bottom: 110px; width: 27%;">
+                <!-- debut remise-->
+                <div class ="row" style="position: fixed;  right: 0; bottom: 175px; width: 27%;">
                     <div class="mb-3 col">
                         <label class="form-label"> Remise</label>
                         <mat-slide-toggle formControlName="remiseBoolean"></mat-slide-toggle>
@@ -95,19 +118,35 @@
                         <input placeholder="Montant" type="number" formControlName="remise" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixAchat.errors }" />
                     </div>
                 </div>
+                <!-- fin remise-->
+                <!-- debut Montant recu-->
+                <div class ="row" style="position: fixed;  right: 0; bottom: 135px; width: 27%;">
+                    
+                    <div class="mb-3 col">
+                        <input placeholder="Montant recu" type="number" formControlName="montantRecu" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.prixAchat.errors }" />
+                    </div>
+                </div>
+                <!-- fin Montant recu-->
 
             
+                <div style="position: fixed; right: 0; bottom: 125px; width: 27%;">
+                    <div><b style=" right: 0; font-size: 11px;">Total : {{montantTotal | number:'1.0-3'}}  {{entreprise.monnaie}}</b></div>
+                </div>
                 <div style="position: fixed; right: 0; bottom: 110px; width: 27%;">
-                    <div><b style=" right: 0; font-size: 15px;">Total : {{montantTotal}}  {{entreprise.monnaie}}</b></div>
+                    <div><b style=" right: 0; font-size: 11px;">Tva : {{tva |  number:'1.0-3'}}  {{entreprise.monnaie}}</b></div>
+                </div>
+
+                <div style="position: fixed; right: 0; bottom: 95px; width: 27%;">
+                    <div><b style=" right: 0; font-size: 15px;">Montant à payer : {{montantAPayer | number:'1.0-3'}} {{entreprise.monnaie}}</b></div>
                 </div>
 
                 <div style="position: fixed; right: 0; bottom: 80px; width: 27%;">
-                    <div><b style=" right: 0; font-size: 20px;">Montant à payer : {{montantAPayer}} {{entreprise.monnaie}}</b></div>
+                    <div><b style=" right: 0; font-size: 15px;">Monnaie : {{montantRecu - montantAPayer}} {{entreprise.monnaie}}</b></div>
                 </div>
-
             </div>
             
             </form>
+        </div>
             <div *ngIf="invoiceActual" style="width: 27%;">
                 <div style="position: fixed; right: 0; bottom: 100px; width: 27%;">
                     

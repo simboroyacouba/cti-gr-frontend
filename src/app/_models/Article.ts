@@ -7,6 +7,7 @@ export class Article {
 	nom?: string;
 	description?: string;
 	prixVente?: number;
+    tva?: number;
 	prixAchat?: number;
 	idTypeArticle?: BigInt;
 	actif?: boolean;
@@ -22,6 +23,7 @@ export class Article {
         nom?: string,
         description?: string,
         prixVente?: number,
+        tva?: number,
         prixAchat?: number,
         idTypeArticle?: BigInt,
         actif?: boolean,
@@ -36,6 +38,7 @@ export class Article {
         this.nom = nom;
         this.description = description;
         this.prixVente = prixVente;
+        this.tva = tva;
         this.prixAchat = prixAchat;
         this.idTypeArticle = idTypeArticle;
         this.actif = actif;

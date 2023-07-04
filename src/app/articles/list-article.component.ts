@@ -10,6 +10,7 @@ import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
 import { ArticleType } from '@app/_models/ArticleType';
 import { environment } from '@environments/environment';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({ 
@@ -18,34 +19,84 @@ import { environment } from '@environments/environment';
 })
 
 export class ListArticleComponent implements OnInit {
-
+    searchForm!: FormGroup;
+    textRecherche!: string;
+    desactivating = false;
+    loading = false;
     articles!: Article[];
+    articlesGlobal!: Article[];
     entreprise!:Entreprise;
     typesArticles!: ArticleType[];
     constructor(
+      private formBuilder: FormBuilder,
         private  articleService:  ArticleService,
         private accountService: AccountService
     ) {}
 
     ngOnInit() {
-      this.entreprise = JSON.stringify(localStorage.getItem('entreprise')) as unknown as Entreprise;
-      this.articleService.getAll().subscribe({
-        next: (value: Article[]) => this.articles = value,
-        error: (error: any) => { }
-      });
-      
-      this.accountService.getEntreprise()
-      .subscribe((x) => {
-          this.entreprise = x;
-      });
+      this.getEntreprise();
+      this.getArticles();
       this.articleService.getAllTypeArticle().subscribe({
         next: (value: ArticleType[]) => {
          this.typesArticles = value;
         },
         error: (error: any) => { }
       });
+      this.searchForm = this.formBuilder.group({
+        textRecherche: ['',],
+      })
+      
+      this.recherche();
     }
-
+    activateDesactivate(idArticle: BigInt){
+      this.desactivating = true;
+      let art = new Article();
+      art.id = idArticle;
+      this.articleService.getById(idArticle).subscribe({
+        next: (value) => {
+          art = value;
+          art.actif = !art.actif;
+          this.articleService.update(art).subscribe({
+            next: (value) => {
+              this.desactivating = false;
+            },
+            error: (error: any) => { }
+        });
+        },
+        error: (error: any) => { }
+      });
+    }
+    getArticles(){
+      this.articleService.getAll().subscribe({
+              next: (value: Article[]) => {
+                this.articles = value;
+                this.articlesGlobal = value;
+              },
+              error: (error: any) => { }
+      });
+    }
+    getEntreprise(){
+      this.entreprise = JSON.stringify(localStorage.getItem('entreprise')) as unknown as Entreprise;
+      this.accountService.getEntreprise()
+      .subscribe((x) => {
+          this.entreprise = x;
+      });
+    }
+    recherche(): void {
+      setTimeout(() => {
+        this.searchForm.valueChanges.subscribe(val => {
+          this.textRecherche = this.searchForm.get('textRecherche')?.value;
+          if(this.textRecherche != undefined || this.textRecherche !=''){
+            this.articles = [];
+            for(let i = 0; i < this.articlesGlobal.length; i++){
+              if(this.articlesGlobal[i].nom!.indexOf(this.textRecherche)!== -1  || this.articlesGlobal[i].code!.indexOf(this.textRecherche)!== -1){
+                this.articles.push(this.articlesGlobal[i]);
+              }
+            }
+          }
+        });
+      }, 1000);
+    }
       pageChang(){
       }
     

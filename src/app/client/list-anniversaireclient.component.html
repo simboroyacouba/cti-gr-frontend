@@ -1,0 +1,86 @@
+﻿<h1>Anniversaires Clients</h1>
+
+<div>
+    <H1>Aujourd'hui</H1>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Nom, prénom</th>
+            <th style="width: 10%">Téléphone</th>
+            <th style="width: 15%">Date anniversaire</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let client of clientsAnniversaireToday">
+            <td style="width: 15%">{{client.code}}</td>
+            <td style="width: 15%">{{client.nom}} {{client.prenom}}</td>
+            <td style="width: 15%">{{client.telephone}}</td>
+            <td style="width: 15%">{{client.dateAnniversaire | date:'dd/MM/yyyy'}}</td>
+            
+            <td style="white-space: nowrap">
+                <a routerLink="invoicesclient/{{client.id}}" class="btn btn-sm btn-primary me-1">Voir les achats</a>
+                
+            </td>
+        </tr>
+        <tr *ngIf="!clientsAnniversaireToday">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <H1>Prochainement</H1>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 15%">Code</th>
+            <th style="width: 15%">Nom, prénom</th>
+            <th style="width: 10%">Téléphone</th>
+            <th style="width: 15%">Date anniversaire</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let client of clientsAnniversaire01">
+            <td style="width: 15%">{{client.code}}</td>
+            <td style="width: 15%">{{client.nom}} {{client.prenom}}</td>
+            <td style="width: 15%">{{client.telephone}}</td>
+            <td style="width: 15%">{{client.dateAnniversaire | date:'dd/MM/yyyy'}}</td>
+            
+            <td style="white-space: nowrap">
+                <a routerLink="invoicesclient/{{client.id}}" class="btn btn-sm btn-primary me-1">Voir les achats</a>
+            </td>
+        </tr>
+        <tr *ngIf="!clientsAnniversaire01">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+
+    <tbody>
+        <tr *ngFor="let client of clientsAnniversaire02">
+            <td style="width: 15%">{{client.code}}</td>
+            <td style="width: 15%">{{client.nom}} {{client.prenom}}</td>
+            <td style="width: 15%">{{client.telephone}}</td>
+            <td style="width: 15%">{{client.dateAnniversaire | date:'dd/MM/yyyy'}}</td>
+            
+            <td style="white-space: nowrap">
+                <a routerLink="invoicesclient/{{client.id}}" class="btn btn-sm btn-primary me-1">Voir les achats</a>
+            </td>
+        </tr>
+        <tr *ngIf="!clientsAnniversaire02">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+  
+ 
+ 
+</div>

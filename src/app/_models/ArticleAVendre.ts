@@ -6,6 +6,7 @@ export class ArticleAVendre {
     quantite?: number;
     prixUnitaire?: number;
     montant?: number;
+    tva?: number;
 
     constructor(idArticle?: BigInt,
         nomArticle?: string,
@@ -13,7 +14,8 @@ export class ArticleAVendre {
         idFacture?: BigInt,
         quantite?: number,
         prixUnitaire?: number,
-        montant?: number){
+        montant?: number,
+        tva?: number,){
 
             this.idArticle = idArticle;
             this.nomArticle =  nomArticle;
@@ -22,5 +24,6 @@ export class ArticleAVendre {
             this.quantite = quantite;
             this.prixUnitaire = prixUnitaire;
             this.montant = montant;
+            this.tva = tva;
         }
 }

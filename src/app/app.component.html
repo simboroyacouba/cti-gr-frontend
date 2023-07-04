@@ -1,17 +1,17 @@
 ﻿<!--debut si l'utilisateur n'est pas connecte un affiche la page de connexion sans menu-->
-<div *ngIf="userConnected == false">
+<div *ngIf="!user">
   <router-outlet></router-outlet>
 </div>
 <!--fin si l'utilisateur n'est pas connecte un affiche la page de connexion sans menu-->
 
 <!-- debut si l'utilisateur est connecte un affiche la page avec menu-->
- <div *ngIf="userConnected == true"style="height: 100%; width: 100%;">
+<div *ngIf="user"style="height: 100%; width: 100%;">
   <div  *ngIf="licenceDeSession.licenceActive == true">
     <div class="sidebar" [class.sidebar-close]="!openSidebar">
-      <div class="logo-details">
+       <div class="logo-details">
         <div class="logo"></div>
       </div>
-       <a href="/users/">Utilisateurs</a><br>
+     <!--  <a href="/users/">Utilisateurs</a><br>
        <a href="articles/">Articles</a><br>
        <a href="articles/articleType/">types d'articles</a><br>
        <a href="pos/">pos</a><br>
@@ -21,12 +21,14 @@
        <a href="rapport/facturation">rapport facturation</a><br>
        <a href="client">clients</a><br>
        <a href="fournisseur">fournisseur</a><br>
+       <a href="/listbirthday">list birthday</a><br>
+       <a href="rapport/entreprise">entreprise</a><br>
 
-
+-->
 
        
-      <!-- debut menu-->
-      <!--<ul class="nav-links" id="nav-links">
+      <!-- debut menu--><!---->
+      <ul class="nav-links" id="nav-links">
         <li *ngFor="let item of menuSidebar" #itemEl routerLinkActive="active">
           <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
             <a [routerLink]="[item.link]">
@@ -48,10 +50,10 @@
             </li>
           </ul>
         </li>
-      </ul>-->
+      </ul>
        <!-- fin menu-->
       
-    </div>
+   </div>
    
     <section class="home-section">
       <div class="home-header">
@@ -96,7 +98,7 @@
  
     
   </div>
-
+<!-- debut si la licence a expiré-->
   <div *ngIf="licenceDeSession.licenceActive == false" style="height: 100%; width: 100%; background: #21a8d1">
     
     <div style=" height: 90px;"></div>
@@ -128,6 +130,7 @@
         </div>
     </div>
   </div>
+  <!-- fin si la licence a expiré-->
 </div>
  <!--  
 <footer style="position: fixed;

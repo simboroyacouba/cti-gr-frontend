@@ -11,6 +11,10 @@ import { Observable } from 'rxjs/internal/Observable';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Role } from '@app/_models/role';
+import { MatDialog } from '@angular/material/dialog';
+
+import { DialogInfo } from '@app/_components/dialogInfo/DialogInfo';
+
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
@@ -43,6 +47,7 @@ export class AddEditComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        public dialog: MatDialog,
         private accountService: AccountService,
         private alertService: AlertService,
     ) {}
@@ -104,6 +109,12 @@ export class AddEditComponent implements OnInit {
         }
 
         
+    }
+
+    problem(message: string){
+      const dialogRef = this.dialog.open(DialogInfo, {
+        data: {name: message},
+      });
     }
     functionPhoto(){
       if(this.changerPhoto == false){
@@ -190,7 +201,6 @@ export class AddEditComponent implements OnInit {
         this.form.valueChanges.subscribe(val => {
           this.selectedRoles = this.form.get('rolesSelectedOnForm')?.value;
           this.selectedRoleString = this.selectedRoles.map(role => role.name) as string[];
-          console.log();
             this. userAddOrEdit = new User(this.id,
                                     '',//Code
                                     this.form.get('firstName')?.value,//prenom
@@ -245,6 +255,7 @@ export class AddEditComponent implements OnInit {
             this.router.navigateByUrl('/users');
         },
         error: error => {
+          this.problem(error);
             this.alertService.error(error);
         }
     });
@@ -259,6 +270,7 @@ export class AddEditComponent implements OnInit {
             this.router.navigateByUrl('/users');
         }, 
             error: error => {
+              this.problem(error);
                 this.alertService.error(error);
             }
         });

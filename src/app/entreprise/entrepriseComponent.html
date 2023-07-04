@@ -1,0 +1,162 @@
+﻿<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Modifier l'entreprise</h1>
+      
+
+      <section class="section">
+        <div style="width: auto;">
+
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title"><b>Détails de l'entreprise</b></h3>
+                
+                <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div >
+                        <img  width="200" height="200" class="rounded-circle" [src]="functionPhoto()" style=" float: left;">
+                    </div>
+                    <div class="row" >
+                        <div class="mb-3 col">
+                            <label class="form-label">Nom</label>
+                            <input type="text" formControlName="nom" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }" />
+                            <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
+                                <div *ngIf="f.nom.errors.required">Le nom est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col">
+                            <label class="form-label">Sigle</label>
+                            <input type="text" formControlName="sigle" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.sigle.errors }" />
+                            <div *ngIf="submitted && f.sigle.errors" class="invalid-feedback">
+                                <div *ngIf="f.sigle.errors.required">Le nom est obligatoire</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Pays</label>
+                            <input type="text" formControlName="pays" class="form-control"/>
+                        </div>
+
+                        <div class="mb-3 col">
+                            <label class="form-label">Ville</label>
+                            <input type="text" formControlName="ville" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ville.errors }" />
+                            <div *ngIf="submitted && f.ville.errors" class="invalid-feedback">
+                                <div *ngIf="f.ville.errors.required">La ville est obligatoire</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Contact</label>
+                            <input type="text" formControlName="texte1" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.texte1.errors }" />
+                            <div *ngIf="submitted && f.texte1.errors" class="invalid-feedback">
+                                <div *ngIf="f.texte1.errors.required">Le contact est obligatoire</div>
+                            </div>
+                        </div>
+
+                            
+
+                            <div class="mb-3 col">
+                                <label class="form-label">Email</label>
+                                <input max="100" min="0" type="email" formControlName="texte3" class="form-control"  />
+                               
+                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">RCCM</label>
+                            <input type="text" formControlName="rccm" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.rccm.errors }" />
+                            <div *ngIf="submitted && f.rccm.errors" class="invalid-feedback">
+                                <div *ngIf="f.rccm.errors.required">Le contact est obligatoire</div>
+                            </div>
+                        </div>
+
+                            <div class="mb-3 col">
+                                <label class="form-label">IFU</label>
+                                <input max="100" min="0" type="text" formControlName="ifu" class="form-control"  />
+                               
+                            </div>
+
+                            
+                           
+                    </div>
+
+                   
+                    <div class="row">
+                        <div class="mb-3 col">
+                            <label class="form-label">Monnaie</label>
+                            <input type="text" formControlName="monnaie" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contact.errors }" />
+                            <div *ngIf="submitted && f.monnaie.errors" class="invalid-feedback">
+                                <div *ngIf="f.monnaie.errors.required">Le contact est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col">
+                            <label class="form-label"> Texte remerciement</label>
+                            <input max="100" min="0" type=" text" formControlName="texte4" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="mb-3 col">
+                            <label class="form-label"> Nombre ticket de caisse</label>
+                            <input max="100" min="0" type="number" formControlName="description" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <label class="form-label">
+                            <div *ngIf="id"> Changer de photo</div>
+                            <div *ngIf="!id"> Charger une photo photo</div>
+                        </label>
+                        <div class="row">
+                            <div class="col-8">
+                            <label class="btn btn-default p-0">
+                                <input class="form-control" type="file" accept="image/*" (change)="selectFile($event)" />
+                            </label>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        <div *ngIf="currentFile && progress" class="progress my-3">
+                            <div
+                            class="progress-bar progress-bar-info"
+                            role="progressbar"
+                            attr.aria-valuenow="{{ progress }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            [ngStyle]="{ width: progress + '%' }"
+                            >
+                            {{ progress }}%
+                            </div>
+                        </div>
+                        
+                        <div *ngIf="message" class="alert alert-secondary" role="alert">
+                            {{ message }}
+                        </div>
+                        
+                        
+                     
+                    </div>
+                    <br>
+                    <div class="mb-3">
+                        <button [disabled]="submitting" class="btn btn-primary">
+                            <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+                            Enregistrer
+                        </button>
+                        <a routerLink="/users" class="btn btn-link">Annuler</a>
+                    </div>
+                </form>
+                <div *ngIf="loading" class="text-center m-5">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </div><!-- End Page Title -->
+
+    

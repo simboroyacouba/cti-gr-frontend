@@ -6,6 +6,9 @@ export class VenteArticle {
     idFacture?: BigInt;
     quantite?: number;
     prixUnitaire?: number;
+    prixTotal?: number;
+    tva?: number;
+    tvaTotal?: number;
 
     constructor(
         id?: BigInt,
@@ -14,7 +17,10 @@ export class VenteArticle {
         idSession?: BigInt,
         idFacture?: BigInt,
         quantite?: number,
-        prixUnitaire?: number){
+        prixUnitaire?: number,
+        prixTotal?: number,
+        tva?: number,
+        tvaTotal?: number,){
 
             this.id = id;
             this.date = date;
@@ -23,5 +29,8 @@ export class VenteArticle {
             this.idFacture = idFacture;
             this.quantite = quantite;
             this.prixUnitaire = prixUnitaire;
+            this.prixTotal = prixTotal;
+            this.tva = tva;
+            this.tvaTotal = tvaTotal;
         }
 }

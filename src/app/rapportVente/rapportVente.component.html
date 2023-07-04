@@ -49,7 +49,9 @@
             <tr>
                 <th style="width: 25%">nom</th>
                 <th style="width: 25%">Quantité</th>
-                <th style="width: 25%">Prix de vente</th>
+                <th style="width: 25%">Prix de vente unitaire</th>
+                <th style="width: 25%">montant total</th>
+                <th style="width: 25%">Tva totale</th>
             </tr>
         </thead>
         <tbody>
@@ -58,6 +60,8 @@
                 <td style="width: 25%">{{getNomArticleById(ventArticle!.idArticle!)}}</td>
                 <td style="width: 25%">{{ventArticle.quantite}}</td>
                 <td style="width: 25%">{{ventArticle.prixUnitaire}} {{entreprise.monnaie}}</td>
+                <td style="width: 25%">{{ventArticle.prixTotal}} {{entreprise.monnaie}}</td>
+                <td style="width: 25%">{{ventArticle.tvaTotal}} {{entreprise.monnaie}}</td>
                 
                 <td style="white-space: nowrap"></td>
             </tr>

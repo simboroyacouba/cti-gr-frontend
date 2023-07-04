@@ -14,6 +14,12 @@
         </ul>
         </a>
     </ul>  
+    <div style="align-content: center;">
+        <form *ngIf="!loading" [formGroup]="searchForm" (ngSubmit)="recherche()">
+            <input type="text" formControlName="textRecherche">
+        </form>
+    </div>
+    
 </div>
     
 <div>
@@ -22,10 +28,11 @@
         <tr>
             <th style="width: 15%">Code</th>
             <th style="width: 15%">Nom</th>
-            <th style="width: 15%">Prix d'achat</th>
             <th style="width: 15%">Prix de vente</th>
             <th style="width: 15%">quantité en stock</th>
-            <th style="width: 15%">stockable</th>
+            <th style="width: 15%">Qté minimale</th>
+            <th style="width: 15%">Tva</th>
+            <th style="width: 15%">Actif</th>
             <th style="width: 10%"></th>
         </tr>
     </thead>
@@ -33,16 +40,22 @@
         <tr *ngFor="let article of articles">
             <td style="width: 15%">{{article.code}}</td>
             <td style="width: 15%">{{article.nom}}</td>
-            <td style="width: 15%">{{article.achat}}</td>
             <td style="width: 15%">{{article.prixAchat}} {{entreprise.monnaie}}</td>
             <td style="width: 15%">{{article.prixVente}} {{entreprise.monnaie}}</td>
             
             <td style="width: 15%">{{article.stockMin}}</td>
+            <td style="width: 15%">{{article.tva}} %</td>
+            <td style="width: 15%">
+                <mat-slide-toggle [(ngModel)]="article.actif" (change)="activateDesactivate(article.id!)" ></mat-slide-toggle>
+                <div *ngIf="desactivating" class="text-center m-5">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </div>
+            </td>
             <td style="white-space: nowrap">
-                <a routerLink="edit/{{article.id}}" class="btn btn-sm btn-primary me-1">Modifier</a>
+                <a routerLink="edit/{{article.id}}" class="btn btn-sm btn-primary me-1" style="color: rgb(255, 255, 255);">Modifier</a>
                 
-                <a routerLink="restockage/{{article.id}}" class="btn btn-sm btn-primary me-1">restocker</a>
-                <a *ngIf="article.achat == true" routerLink="depackage/{{article.id}}" class="btn btn-sm btn-primary me-1">Dépackquer</a>
+                <a routerLink="restockage/{{article.id}}" class="btn btn-sm btn-primary me-1" style="color: rgb(255, 255, 255);">restocker</a>
+                <a *ngIf="article.achat == true" routerLink="depackage/{{article.id}}" class="btn btn-sm btn-primary me-1" style="color: rgb(255, 255, 255);">Dépackquer</a>
                 <!--<button *ngIf="article.actif == false" style="background-color: darkgreen;"  class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
                     <span *ngIf="article.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!article.isDeleting">
@@ -75,6 +88,6 @@
   
  
 
-<
+
  
 </div>
